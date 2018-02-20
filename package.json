@@ -1,0 +1,11 @@
+{
+  "name": "a-cloud-guru",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:ACloudGuru/a-cloud-guru.git",
+  "author": "Zac Lang <zac.lang@acloud.guru>",
+  "license": "MIT",
+  "devDependencies": {
+    "lerna": "^2.9.0"
+  }
+}
