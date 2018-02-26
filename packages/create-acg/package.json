@@ -1,0 +1,23 @@
+{
+  "name": "@a-cloud-guru/create-acg",
+  "version": "0.3.1",
+  "main": "index.js",
+  "license": "MIT",
+  "bin": "./index.js",
+  "scripts": {
+    "precommit": "lint-staged",
+    "prepublish": "node ./scripts/prepublish",
+    "lint": "eslint .",
+    "test": "echo TODO: testing create-acg"
+  },
+  "dependencies": {
+    "chalk": "^2.3.1",
+    "commander": "^2.14.1",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.1.0"
+  },
+  "devDependencies": {
+    "lint-staged": "^7.0.0",
+    "validate-npm-package-name": "^3.0.0"
+  }
+}

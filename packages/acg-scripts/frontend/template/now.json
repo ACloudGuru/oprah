@@ -1,0 +1,7 @@
+{
+  "name": "",
+  "alias": "",
+  "type": "npm",
+  "forwardNpm": true,
+  "dotenv": ".ev.production"
+}

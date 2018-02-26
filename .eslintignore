@@ -1,0 +1,4 @@
+node_modules/
+build
+packages/react-scripts/frontend/
+packages/react-scripts/backend/

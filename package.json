@@ -6,6 +6,14 @@
   "author": "Zac Lang <zac.lang@acloud.guru>",
   "license": "MIT",
   "devDependencies": {
+    "eslint": "^4.18.1",
+    "husky": "^0.15.0-rc.8",
     "lerna": "^2.9.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lerna run --concurrency 1 --stream precommit",
+      "pre-push": "lerna run lint && lerna run test"
+    }
   }
 }
