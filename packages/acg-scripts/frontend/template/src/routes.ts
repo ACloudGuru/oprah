@@ -1,13 +1,13 @@
 'use strict';
 
-const nextRoutes = require('next-routes');
+import nextRoutes from 'next-routes';
 
 const routes = nextRoutes();
 
 routes.add({
   name: 'home',
-  pattern: '/',
   page: 'index',
+  pattern: '/',
 });
 
 module.exports = routes;

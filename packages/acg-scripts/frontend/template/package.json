@@ -5,7 +5,7 @@
   },
   "scripts": {
     "precommit": "",
-    "format": "acg-scripts format src/**/*.(js.ts)",
+    "format": "acg-scripts format src/**/*.{ts,tsx,js,jsx}",
     "lint": "acg-scripts lint",
     "test": "acg-scripts test",
     "dev": "next src",
@@ -33,6 +33,9 @@
     "react-dom": "^16.2.0"
   },
   "devDependencies": {
-    "@a-cloud-guru/acg-scripts": "^0.4.0"
+    "@a-cloud-guru/acg-scripts": "^0.4.0",
+    "@types/next": "^2.4.8",
+    "@types/react": "^16.0.38",
+    "@types/react-dom": "^16.0.4"
   }
 }
