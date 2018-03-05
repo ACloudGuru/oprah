@@ -1,6 +1,4 @@
-'use strict';
-
-import nextRoutes from 'next-routes';
+const nextRoutes = require('next-routes');
 
 const routes = nextRoutes();
 

@@ -5,3 +5,4 @@ format:
 lint:
   "*.{js,jsx}":
     - eslint
+    - yarn --cwd frontends/teams precommit
