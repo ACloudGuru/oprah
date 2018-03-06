@@ -8,6 +8,7 @@ const here = p => path.join(__dirname, p);
 const useBuiltInBabelConfig = !hasFile('.babelrc') && !hasPkgProp('babel');
 
 const ignores = [
+  '/.next/',
   '/node_modules/',
   '/fixtures/',
   '/__tests__/helpers/',
