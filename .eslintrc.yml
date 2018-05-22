@@ -13,3 +13,7 @@ rules:
   - error
   - global
   curly: warn
+globals:
+  describe: true
+  it: true
+  expect: true
