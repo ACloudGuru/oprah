@@ -2,7 +2,14 @@
 
 const get = require('lodash.get');
 const { SchemaDirectiveVisitor } = require('graphql-tools');
-const { defaultFieldResolver } = require('graphql');
+const {
+  GraphQLList,
+  GraphQLDirective,
+  GraphQLEnumType,
+  GraphQLBoolean,
+  DirectiveLocation,
+  defaultFieldResolver
+} = require('graphql');
 
 // Examples:
 
@@ -33,9 +40,45 @@ const { defaultFieldResolver } = require('graphql');
 //   id: 'google|80dffa9b5ff74089071'
 // }
 
+const generateEnum = enumValues => enumValues.reduce(
+  (acc, value) => Object.assign(
+    acc,
+    {
+      [value]: {
+        description: value
+      }
+    }
+  ), {});
 
+const RoleType = new GraphQLEnumType({
+  name: 'Role',
+  values: generateEnum(['SERVER', 'ADMIN', 'ORGANISATION_ADMIN', 'VIEWER'])
+});
 
 class ViewableDirective extends SchemaDirectiveVisitor {
+  static getDirectiveDeclaration(directiveName, schema) {
+    const previousDirective = schema.getDirective(directiveName);
+
+    if (previousDirective) {
+      throw new Error(`Duplicate declaration of directive: ${directiveName} has been found`);
+    }
+
+    return new GraphQLDirective({
+      name: directiveName,
+      locations: [
+        DirectiveLocation.FIELD_DEFINITION
+      ],
+      args: {
+        roles: {
+          type: new GraphQLList(RoleType)
+        },
+        throwError: {
+          type: GraphQLBoolean
+        }
+      }
+    });
+  }
+
   visitFieldDefinition(field) {
     const roles = get(this, 'args.roles') || [];
     const throwError = get(this, 'args.throwError') || false;

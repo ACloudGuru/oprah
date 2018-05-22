@@ -9,10 +9,8 @@ const schema = makeExecutableSchema({
   typeDefs: [
     `
       type Query {
-        hello: String @viewable(roles: ["SERVER"])
+        hello: String @viewable(roles: [SERVER])
       }
-
-      directive @viewable(roles: [String]) on FIELD_DEFINITION
     `
   ],
   resolvers: {
