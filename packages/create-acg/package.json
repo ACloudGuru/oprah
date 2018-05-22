@@ -5,7 +5,7 @@
   "license": "MIT",
   "bin": "./index.js",
   "scripts": {
-    "precommit": "lint-staged",
+    "precommit": "echo lint-staged",
     "prepublish": "node ./scripts/prepublish",
     "lint": "eslint .",
     "test": "echo TODO: testing create-acg"
