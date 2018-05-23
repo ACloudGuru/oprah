@@ -1,3 +1,5 @@
+'use strict'
+
 module.exports = {
-  viewable: require('./directives/viewable')
+  auth: require('./directives/auth')
 };
