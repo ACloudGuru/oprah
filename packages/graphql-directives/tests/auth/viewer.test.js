@@ -1,6 +1,6 @@
 'use strict';
 
-const ViewableDirective = require('../../directives/viewable');
+const AuthDirective = require('../../directives/auth');
 const { graphql } = require('graphql');
 const { makeExecutableSchema } = require('graphql-tools');
 const testUtils = require('../test-utils');
@@ -9,7 +9,7 @@ const schema = makeExecutableSchema({
   typeDefs: [
     `
       type Query {
-        hello: String @viewable(roles: [VIEWER])
+        hello: String @auth(roles: [VIEWER])
       }
     `
   ],
@@ -19,11 +19,11 @@ const schema = makeExecutableSchema({
     }
   },
   schemaDirectives: {
-    viewable: ViewableDirective
+    auth: AuthDirective
   }
 });
 
-describe('viewable directive - VIEWER', () => {
+describe('auth directive - VIEWER', () => {
   const query = `
     query {
       hello

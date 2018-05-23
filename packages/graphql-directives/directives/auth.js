@@ -55,7 +55,7 @@ const RoleType = new GraphQLEnumType({
   values: generateEnum(['SERVER', 'ADMIN', 'ORGANISATION_ADMIN', 'VIEWER'])
 });
 
-class ViewableDirective extends SchemaDirectiveVisitor {
+class AuthDirective extends SchemaDirectiveVisitor {
   static getDirectiveDeclaration(directiveName, schema) {
     const previousDirective = schema.getDirective(directiveName);
 
@@ -83,7 +83,7 @@ class ViewableDirective extends SchemaDirectiveVisitor {
     const roles = get(this, 'args.roles') || [];
     const throwError = get(this, 'args.throwError') || false;
     const resolve = get(field, 'resolve') || defaultFieldResolver;
-    field.description = `viewable roles: [${roles}]`
+    field.description = `restricted to: [${roles}]`
     field.resolve = (...resolveArgs) => {
       // resolveArgs [root, args, context, info]
       const context = get(resolveArgs, '2') || {};
@@ -117,4 +117,4 @@ const isOrganisationAdmin = viewer => {
 };
 const isViewer = viewer => !!get(viewer, 'id');
 
-module.exports = ViewableDirective;
+module.exports = AuthDirective;
