@@ -1,32 +1,19 @@
-import * as AWS from 'aws-sdk';
-import { Handler, Context, Callback } from 'aws-lambda';
-import { invert, pickBy, startsWith, valuesIn } from 'lodash';
+'use strict';
 
-const ssm = new AWS.SSM({apiVersion: '2014-11-06'});
+const AWS = require('aws-sdk');
+const { invert, pickBy, startsWith, valuesIn } = require('lodash');
 
-type SSMEnvToPathMap = {
-    [key: string]: any
-}
+const ssm = new AWS.SSM({ apiVersion: '2014-11-06' });
 
-type SSMPathToEnvMap = {
-    [key: string]: any
-}
-
-type SSMValues = {
-    [key: string]: any
-}
-
-type LambdaHandler = (event: any, context: Context, callback: Callback) => void
-
-const getSSMKeys = (): SSMEnvToPathMap => {
+const getSSMKeys = () => {
     return pickBy(process.env, (value, key) => {
         return startsWith(key, 'SSM');
     })
 };
 
-const populateWithSSMValues = (pathToEnvMap: SSMPathToEnvMap, ssmResponse: AWS.SSM.GetParametersResult) => {
+const populateWithSSMValues = (pathToEnvMap, ssmResponse) => {
     const parameters = ssmResponse.Parameters || [];
-    return parameters.reduce((acc: SSMValues, { Name,  Value }) => {
+    return parameters.reduce((acc, { Name,  Value }) => {
         if (!Name) {
             return acc;
         }
@@ -39,14 +26,16 @@ const populateWithSSMValues = (pathToEnvMap: SSMPathToEnvMap, ssmResponse: AWS.S
     }, {})
 }
 
-const warnInvalidParameters = (ssmResponse: AWS.SSM.GetParametersResult) => {
+const warnInvalidParameters = ssmResponse => {
     const invalidParameters = ssmResponse.InvalidParameters || [];
     invalidParameters.forEach(key => {
         console.error(`Unable to retreive: ${key}`)
     });
+
+    return ssmResponse;
 }
 
-const ssmEnvReader = (handler: LambdaHandler) => async (event: any, context: Context, callback: Callback) => {
+const ssmEnvReader = handler => (event, context, callback) => {
     const envToPathMap = getSSMKeys();
     const pathToEnvMap = invert(envToPathMap);
 
@@ -56,18 +45,22 @@ const ssmEnvReader = (handler: LambdaHandler) => async (event: any, context: Con
     };
 
     if (!params.Names.length) {
-        return handler(event, context, callback);
+        return Promise.resolve()
+        .then(() => handler(event, context, callback));
     }
 
-    const ssmResponse = await ssm.getParameters(params).promise();
-    warnInvalidParameters(ssmResponse);
-    const ssmValues = populateWithSSMValues(pathToEnvMap, ssmResponse);
-    const eventWithSSM = Object.assign({}, event, { ssm: ssmValues });
-    return handler(eventWithSSM, context, callback);
+    return ssm.getParameters(params).promise()
+    .then(warnInvalidParameters)
+    .then(ssmResponse => {
+        const ssmValues = populateWithSSMValues(pathToEnvMap, ssmResponse);
+        const eventWithSSM = Object.assign({}, event, { ssm: ssmValues });
+        return handler(eventWithSSM, context, callback);
+    });
 }
 
-export default ssmEnvReader;
-export { ssmEnvReader };
+module.exports = {
+    ssmEnvReader
+};
 
 
 
