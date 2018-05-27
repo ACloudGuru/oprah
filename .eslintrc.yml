@@ -14,6 +14,8 @@ rules:
   - global
   curly: warn
 globals:
+  jest: true
+  beforeEach: true
   describe: true
   it: true
   expect: true

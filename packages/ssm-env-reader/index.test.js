@@ -1,10 +1,6 @@
-declare var jest;
-declare var describe;
-declare var it;
-declare var expect;
-declare var beforeEach;
-import { ssmEnvReader } from './index';
-import { Handler, Context } from 'aws-lambda';
+'use strict';
+
+const { ssmEnvReader } = require('./index');
 
 jest.mock('aws-sdk', () => {
     return {
@@ -41,46 +37,50 @@ describe('ssmEnvReader', () => {
         delete process.env.SSM_NONEXISTANT;
     });
 
-    const handler: Handler = (event, context, callback) => ({ event, context, callback });
+    const handler = (event, context, callback) => ({ event, context, callback });
 
-    it('generates an event with all prefixed SSM environment variables', async () => {
+    it('generates an event with all prefixed SSM environment variables', () => {
         process.env.SSM_FIRSTVAR = '/path/to/firstVar'
         process.env.SSM_SECONDVAR = '/path/to/secondVar'
         process.env.SSM_NONEXISTANT = '/path/to/nonexistant'
 
         const lambdaHandler = ssmEnvReader(handler);
         const cb = () => {};
-        const mockedContext: any = { existing: 'property' };
+        const mockedContext = { existing: 'property' };
 
-        const result = await lambdaHandler({}, mockedContext, cb);
+        const promise = lambdaHandler({}, mockedContext, cb);
 
-        expect(result).toEqual({
-            event: {
-                ssm: {
-                    FIRSTVAR: 'firstVar',
-                    SECONDVAR: 'secondVar'
-                }
-            },
-            context: {
-                existing: 'property'
-            },
-            callback: cb
-        })
+        return promise.then(result => {
+            expect(result).toEqual({
+                event: {
+                    ssm: {
+                        FIRSTVAR: 'firstVar',
+                        SECONDVAR: 'secondVar'
+                    }
+                },
+                context: {
+                    existing: 'property'
+                },
+                callback: cb
+            });
+        });
     });
 
-    it('does not alter the event if there are no SSM vars', async () => {
+    it('does not alter the event if there are no SSM vars', () => {
         const lambdaHandler = ssmEnvReader(handler);
         const cb = () => {};
-        const mockedContext: any = { existing: 'property' };
+        const mockedContext = { existing: 'property' };
 
-        const result = await lambdaHandler({}, mockedContext, cb);
+        const promise = lambdaHandler({}, mockedContext, cb);
 
-        expect(result).toEqual({
-            event: {},
-            context: {
-                existing: 'property'
-            },
-            callback: cb
-        })
+        return promise.then(result => {
+            expect(result).toEqual({
+                event: {},
+                context: {
+                    existing: 'property'
+                },
+                callback: cb
+            });
+        });
     });
 });
