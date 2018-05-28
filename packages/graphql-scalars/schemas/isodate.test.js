@@ -3,6 +3,7 @@
 const { makeExecutableSchema } = require('graphql-tools');
 const { graphql } = require('graphql');
 const { isodate } = require('../index');
+const merge = require('lodash.merge');
 
 const schema = makeExecutableSchema({
   typeDefs: [
@@ -13,13 +14,12 @@ const schema = makeExecutableSchema({
       }
     ` + isodate.typeDef
   ],
-  resolvers: {
+  resolvers: merge({
     Query: {
       createdDate: () => '10-12-2018',
-      updatedDate: () => '12-12-2018'
-    },
-    ISODate: isodate.resolver
-  }
+      updatedDate: () => '10-12-2018'
+    }
+  }, isodate.resolver)
 });
 
 it('should return ISODate string', () => {
@@ -31,7 +31,7 @@ it('should return ISODate string', () => {
   `;
 
   return graphql(schema, query, null).then(res => {
+    expect(res.data.updatedDate).toEqual('2018-10-11T13:00:00.000Z');
     expect(res.data.createdDate).toEqual('2018-10-11T13:00:00.000Z');
-    expect(res.data.updatedDate).toEqual('2018-12-11T13:00:00.000Z');
   });
 });

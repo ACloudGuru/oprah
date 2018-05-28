@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash.get": "^4.4.2"
+    "lodash.merge": "^4.4.2"
   },
   "devDependencies": {
     "graphql": "^0.13.1",
