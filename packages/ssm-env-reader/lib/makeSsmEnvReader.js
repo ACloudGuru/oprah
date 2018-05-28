@@ -55,7 +55,7 @@ const getParameters = ({ envToPathMap, Names }) => {
     .then(ssmResponse => populateWithSSMValues({ envToPathMap, ssmResponse }))
 }
 
-const makeSsmEnvReader = ({ env }) => handler => (event, context, callback) => {
+const makeSsmEnvReader = ({ env, getCurrentDate }) => handler => (event, context, callback) => {
     const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'))
 
     return getAllParameters({ envToPathMap })
