@@ -1,7 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-const { invert, pickBy, startsWith, valuesIn } = require('lodash');
+const { invert, pickBy, startsWith, valuesIn, chunk } = require('lodash');
 
 const ssm = new AWS.SSM({ apiVersion: '2014-11-06' });
 
@@ -30,23 +30,37 @@ const warnInvalidParameters = ssmResponse => {
     return ssmResponse;
 }
 
-const makeSsmEnvReader = ({ env }) => handler => (event, context, callback) => {
-    const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'))
+const getAllParameters = ({ envToPathMap, parameters }) => {
+    const chunks = chunk(parameters, 10);
+    return Promise.all(
+        chunks.map(Names => getParameters({ envToPathMap, Names }))
+    )
+    .then(responses => responses.reduce((acc, value) => Object.assign({}, acc, value), {}));
+}
 
+const getParameters = ({ envToPathMap, Names }) => {
     const params = {
-        Names: valuesIn(envToPathMap),
+        Names,
         WithDecryption: true
     };
 
-    if (!params.Names.length) {
+    return ssm.getParameters(params).promise()
+    .then(warnInvalidParameters)
+    .then(ssmResponse => populateWithSSMValues({ envToPathMap, ssmResponse }))
+}
+
+const makeSsmEnvReader = ({ env }) => handler => (event, context, callback) => {
+    const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'))
+
+    const parameters = valuesIn(envToPathMap);
+
+    if (!parameters.length) {
         return Promise.resolve()
         .then(() => handler(event, context, callback));
     }
 
-    return ssm.getParameters(params).promise()
-    .then(warnInvalidParameters)
-    .then(ssmResponse => {
-        const ssmValues = populateWithSSMValues({ envToPathMap, ssmResponse });
+    return getAllParameters({ envToPathMap, parameters })
+    .then(ssmValues => {
         const eventWithSSM = Object.assign({}, event, { ssm: ssmValues });
         return handler(eventWithSSM, context, callback);
     });

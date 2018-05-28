@@ -90,7 +90,7 @@ describe('makeSsmEnvReader', () => {
                 WithDecryption: true
             });
 
-            expect(mockGetParameters.mock.calls[0][1]).toEqual({
+            expect(mockGetParameters.mock.calls[1][0]).toEqual({
                 Names: [
                     '/path/to/ELEVENTHVAR',
                     '/path/to/TWELFTHVAR'
