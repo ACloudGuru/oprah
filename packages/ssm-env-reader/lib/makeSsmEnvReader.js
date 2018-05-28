@@ -59,23 +59,21 @@ const getParameters = ({ envToPathMap, Names }) => {
     .then(ssmResponse => populateWithSSMValues({ envToPathMap, ssmResponse }))
 }
 
-const isCacheExpired = ({ getCurrentDate, cacheDuration }) => {
-    const currentDate = getCurrentDate();
-    const isExpired = isAfter(currentDate, cacheExpiryDate);
-
-    if (!cacheExpiryDate || isExpired) {
-        cacheExpiryDate = addMilliseconds(currentDate, cacheDuration);
+const isCacheExpired = ({ currentDate }) => {
+    if (!cacheExpiryDate) {
         return true;
     }
 
-    return false;
+    return isAfter(currentDate, cacheExpiryDate);
 }
 
 const makeSsmEnvReader = ({ env, getCurrentDate, cacheDuration }) => handler => (event, context, callback) => {
     const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'));
-    const isExpired = isCacheExpired({ getCurrentDate, cacheDuration });
+    const currentDate = getCurrentDate();
+    const isExpired = isCacheExpired({ currentDate });
 
     if (!getAllParametersPromise || isExpired) {
+        cacheExpiryDate = addMilliseconds(currentDate, cacheDuration);
         getAllParametersPromise = getAllParameters({ envToPathMap });
     }
 
