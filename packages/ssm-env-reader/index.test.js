@@ -66,7 +66,7 @@ describe('ssmEnvReader', () => {
         });
     });
 
-    it('does not alter the event if there are no SSM vars', () => {
+    it('does not add any SSM vars if there are no SSM vars', () => {
         const lambdaHandler = ssmEnvReader(handler);
         const cb = () => {};
         const mockedContext = { existing: 'property' };
@@ -75,7 +75,9 @@ describe('ssmEnvReader', () => {
 
         return promise.then(result => {
             expect(result).toEqual({
-                event: {},
+                event: {
+                    ssm: {}
+                },
                 context: {
                     existing: 'property'
                 },

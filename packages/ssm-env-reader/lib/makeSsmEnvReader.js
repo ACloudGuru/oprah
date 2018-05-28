@@ -30,7 +30,13 @@ const warnInvalidParameters = ssmResponse => {
     return ssmResponse;
 }
 
-const getAllParameters = ({ envToPathMap, parameters }) => {
+const getAllParameters = ({ envToPathMap }) => {
+    const parameters = valuesIn(envToPathMap);
+
+    if (!parameters.length) {
+        return Promise.resolve({})
+    }
+
     const chunks = chunk(parameters, 10);
     return Promise.all(
         chunks.map(Names => getParameters({ envToPathMap, Names }))
@@ -52,14 +58,7 @@ const getParameters = ({ envToPathMap, Names }) => {
 const makeSsmEnvReader = ({ env }) => handler => (event, context, callback) => {
     const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'))
 
-    const parameters = valuesIn(envToPathMap);
-
-    if (!parameters.length) {
-        return Promise.resolve()
-        .then(() => handler(event, context, callback));
-    }
-
-    return getAllParameters({ envToPathMap, parameters })
+    return getAllParameters({ envToPathMap })
     .then(ssmValues => {
         const eventWithSSM = Object.assign({}, event, { ssm: ssmValues });
         return handler(eventWithSSM, context, callback);
