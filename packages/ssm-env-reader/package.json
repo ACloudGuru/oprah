@@ -1,6 +1,6 @@
 {
   "name": "@a-cloud-guru/ssm-env-reader",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Middleware for reading from SSM",
   "main": "index.js",
   "files": [

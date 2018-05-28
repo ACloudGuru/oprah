@@ -1,6 +1,6 @@
 {
   "name": "@a-cloud-guru/graphql-scalars",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Custom scalars for GraphQL",
   "main": "index.js",
   "scripts": {
