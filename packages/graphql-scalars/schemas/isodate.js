@@ -7,13 +7,15 @@ const typeDef = `
     scalar ISODate
 `;
 
-const resolver = new GraphQLScalarType({
-    name: 'ISODate',
-    description: 'Consumes compatible dates and converts to ISOString Date custom scalar type',
-    parseValue: toISOString,
-    serialize: toISOString,
-    parseLiteral: toISOString,
-});
+const resolver = {
+  ISODate: new GraphQLScalarType({
+      name: 'ISODate',
+      description: 'Consumes compatible dates and converts to and from ISOString Date custom scalar type',
+      parseValue: toISOString,
+      serialize: toISOString,
+      parseLiteral: toISOString,
+  })
+};
 
 module.exports = {
     resolver,

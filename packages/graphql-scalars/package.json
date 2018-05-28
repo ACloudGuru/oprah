@@ -1,6 +1,6 @@
 {
   "name": "@a-cloud-guru/graphql-scalars",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Custom scalars for GraphQL",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lodash.get": "^4.4.2"
+    "lodash.merge": "^4.4.2"
   },
   "devDependencies": {
     "graphql": "^0.13.1",
