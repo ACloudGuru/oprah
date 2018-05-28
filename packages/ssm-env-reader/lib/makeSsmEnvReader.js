@@ -5,13 +5,12 @@ const { invert, pickBy, startsWith, valuesIn } = require('lodash');
 
 const ssm = new AWS.SSM({ apiVersion: '2014-11-06' });
 
-const getSSMKeys = () => {
-    return pickBy(process.env, (value, key) => {
-        return startsWith(key, 'SSM');
-    })
+const getSSMKeys = ({ env }) => {
+    return pickBy(env, (value, key) => startsWith(key, 'SSM'))
 };
 
-const populateWithSSMValues = (pathToEnvMap, ssmResponse) => {
+const populateWithSSMValues = ({ envToPathMap, ssmResponse }) => {
+    const pathToEnvMap = invert(envToPathMap);
     const parameters = ssmResponse.Parameters || [];
     return parameters.reduce((acc, { Name,  Value }) => {
         if (!Name) {
@@ -36,8 +35,7 @@ const warnInvalidParameters = ssmResponse => {
 }
 
 const ssmEnvReader = handler => (event, context, callback) => {
-    const envToPathMap = getSSMKeys();
-    const pathToEnvMap = invert(envToPathMap);
+    const envToPathMap = getSSMKeys({ env: process.env });
 
     const params = {
         Names: valuesIn(envToPathMap),
@@ -52,7 +50,7 @@ const ssmEnvReader = handler => (event, context, callback) => {
     return ssm.getParameters(params).promise()
     .then(warnInvalidParameters)
     .then(ssmResponse => {
-        const ssmValues = populateWithSSMValues(pathToEnvMap, ssmResponse);
+        const ssmValues = populateWithSSMValues({ envToPathMap, ssmResponse });
         const eventWithSSM = Object.assign({}, event, { ssm: ssmValues });
         return handler(eventWithSSM, context, callback);
     });

@@ -8,7 +8,7 @@ jest.mock('aws-sdk', () => {
             return {
                 getParameters: () => {
                     return {
-                        promise: () => Promise.resolve({
+                        promise: jest.fn(() => Promise.resolve({
                             Parameters: [
                                 {
                                     Name: '/path/to/firstVar',
@@ -22,7 +22,7 @@ jest.mock('aws-sdk', () => {
                             InvalidParameters: [
                                 '/path/to/nonexistant'
                             ]
-                        })
+                        }))
                     }
                 }
             };
@@ -82,5 +82,9 @@ describe('ssmEnvReader', () => {
                 callback: cb
             });
         });
+    });
+
+    it('sends get parameter calls in chunks of 10 when the requested parameter list exceeds 10', () => {
+
     });
 });
