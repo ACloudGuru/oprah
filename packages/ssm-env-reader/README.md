@@ -4,6 +4,8 @@ Reads all environment variables with the prefix SSM and evaluates all SSM paths
 
 Populates the lambda event with the SSM values.
 
+The values for the SSM variables are cached for `1 minute`
+
 ## Examples
 In serverless.yml
 
@@ -41,6 +43,6 @@ const handler = (event, context, cb) => {
 };
 
 module.exports = {
-    handler: ssmEnvReader(handlder)
+    handler: ssmEnvReader(handler)
 }
 ```

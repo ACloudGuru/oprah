@@ -34,7 +34,7 @@ const getAllParameters = ({ envToPathMap }) => {
     const parameters = valuesIn(envToPathMap);
 
     if (!parameters.length) {
-        return Promise.resolve({})
+        return Promise.resolve({});
     }
 
     const chunks = chunk(parameters, 10);

@@ -1,6 +1,6 @@
 'use strict';
 
-const { valuesIn, take, takeRight } = require('lodash');
+const { valuesIn, take } = require('lodash');
 
 jest.mock('aws-sdk', () => {
     return {
@@ -21,18 +21,18 @@ const mockPromise = jest.fn()
                 Value: '1st'
             },
             {
-                Name: '/path/to/SECONDVAR',
-                Value: '2nd'
-            },
-            {
                 Name: '/path/to/THIRDVAR',
                 Value: '3rd'
+            },
+            {
+                Name: '/path/to/SIXTHVAR',
+                Value: '6th'
             }
         ],
         InvalidParameters: [
             '/path/to/FOURTHVAR',
             '/path/to/FIFTHVAR',
-            '/path/to/SIXTHVAR',
+            '/path/to/SECONDVAR',
             '/path/to/SEVENTHVAR',
             '/path/to/EIGTHVAR',
             '/path/to/NINTHVAR',
@@ -104,7 +104,7 @@ describe('makeSsmEnvReader', () => {
                 event: {
                     ssm: {
                         FIRSTVAR: '1st',
-                        SECONDVAR: '2nd',
+                        SIXTHVAR: '6th',
                         THIRDVAR: '3rd',
                         ELEVENTHVAR: '11th',
                         TWELFTHVAR: '12th'
