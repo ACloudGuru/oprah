@@ -31,40 +31,7 @@ jest.mock('aws-sdk', () => {
   });
 
 describe('ssmEnvReader', () => {
-    beforeEach(() => {
-        delete process.env.SSM_FIRSTVAR;
-        delete process.env.SSM_SECONDVAR;
-        delete process.env.SSM_NONEXISTANT;
-    });
-
     const handler = (event, context, callback) => ({ event, context, callback });
-
-    it('generates an event with all prefixed SSM environment variables', () => {
-        process.env.SSM_FIRSTVAR = '/path/to/firstVar'
-        process.env.SSM_SECONDVAR = '/path/to/secondVar'
-        process.env.SSM_NONEXISTANT = '/path/to/nonexistant'
-
-        const lambdaHandler = ssmEnvReader(handler);
-        const cb = () => {};
-        const mockedContext = { existing: 'property' };
-
-        const promise = lambdaHandler({}, mockedContext, cb);
-
-        return promise.then(result => {
-            expect(result).toEqual({
-                event: {
-                    ssm: {
-                        FIRSTVAR: 'firstVar',
-                        SECONDVAR: 'secondVar'
-                    }
-                },
-                context: {
-                    existing: 'property'
-                },
-                callback: cb
-            });
-        });
-    });
 
     it('does not add any SSM vars if there are no SSM vars', () => {
         const lambdaHandler = ssmEnvReader(handler);

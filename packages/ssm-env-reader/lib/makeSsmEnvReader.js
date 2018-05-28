@@ -2,8 +2,12 @@
 
 const AWS = require('aws-sdk');
 const { invert, pickBy, startsWith, valuesIn, chunk } = require('lodash');
+const { addMilliseconds, isAfter } = require('date-fns');
 
 const ssm = new AWS.SSM({ apiVersion: '2014-11-06' });
+
+var getAllParametersPromise;
+var cacheExpiryDate;
 
 const populateWithSSMValues = ({ envToPathMap, ssmResponse }) => {
     const pathToEnvMap = invert(envToPathMap);
@@ -55,10 +59,27 @@ const getParameters = ({ envToPathMap, Names }) => {
     .then(ssmResponse => populateWithSSMValues({ envToPathMap, ssmResponse }))
 }
 
-const makeSsmEnvReader = ({ env, getCurrentDate }) => handler => (event, context, callback) => {
-    const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'))
+const isCacheExpired = ({ getCurrentDate, cacheDuration }) => {
+    const currentDate = getCurrentDate();
+    const isExpired = isAfter(currentDate, cacheExpiryDate);
 
-    return getAllParameters({ envToPathMap })
+    if (!cacheExpiryDate || isExpired) {
+        cacheExpiryDate = addMilliseconds(currentDate, cacheDuration);
+        return true;
+    }
+
+    return false;
+}
+
+const makeSsmEnvReader = ({ env, getCurrentDate, cacheDuration }) => handler => (event, context, callback) => {
+    const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'));
+    const isExpired = isCacheExpired({ getCurrentDate, cacheDuration });
+
+    if (!getAllParametersPromise || isExpired) {
+        getAllParametersPromise = getAllParameters({ envToPathMap });
+    }
+
+    return getAllParametersPromise
     .then(ssmValues => {
         const eventWithSSM = Object.assign({}, event, { ssm: ssmValues });
         return handler(eventWithSSM, context, callback);
