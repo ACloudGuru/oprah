@@ -83,8 +83,4 @@ describe('ssmEnvReader', () => {
             });
         });
     });
-
-    it('sends get parameter calls in chunks of 10 when the requested parameter list exceeds 10', () => {
-
-    });
 });

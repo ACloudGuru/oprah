@@ -5,10 +5,6 @@ const { invert, pickBy, startsWith, valuesIn } = require('lodash');
 
 const ssm = new AWS.SSM({ apiVersion: '2014-11-06' });
 
-const getSSMKeys = ({ env }) => {
-    return pickBy(env, (value, key) => startsWith(key, 'SSM'))
-};
-
 const populateWithSSMValues = ({ envToPathMap, ssmResponse }) => {
     const pathToEnvMap = invert(envToPathMap);
     const parameters = ssmResponse.Parameters || [];
@@ -34,8 +30,8 @@ const warnInvalidParameters = ssmResponse => {
     return ssmResponse;
 }
 
-const ssmEnvReader = handler => (event, context, callback) => {
-    const envToPathMap = getSSMKeys({ env: process.env });
+const makeSsmEnvReader = ({ env }) => handler => (event, context, callback) => {
+    const envToPathMap = pickBy(env, (value, key) => startsWith(key, 'SSM'))
 
     const params = {
         Names: valuesIn(envToPathMap),
@@ -56,10 +52,4 @@ const ssmEnvReader = handler => (event, context, callback) => {
     });
 }
 
-module.exports = {
-    ssmEnvReader
-};
-
-
-
-
+module.exports = makeSsmEnvReader;
