@@ -38,7 +38,7 @@ const readCfOutputs = ({ stackName }) => {
         );
       }, {});
     })
-    .catch(err => {
+    .catch(() => {
       console.log(chalk.yellow(`Could not find stack outputs for: [${stackName}]`))
       return {};
     })
