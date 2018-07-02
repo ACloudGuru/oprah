@@ -1,0 +1,38 @@
+{
+  "name": "oprah",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ACloudGuru/tbd.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ACloudGuru/tbd/issues"
+  },
+  "homepage": "https://github.com/ACloudGuru/tbd#readme",
+  "dependencies": {
+    "aws-sdk": "^2.263.1",
+    "bluebird": "^3.5.1",
+    "chalk": "^2.4.1",
+    "js-yaml": "^3.12.0",
+    "lodash.get": "^4.4.2",
+    "lodash.isempty": "^4.4.0",
+    "lodash.map": "^4.6.0",
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.merge": "^4.6.1",
+    "lodash.property": "^4.4.2",
+    "lodash.topairs": "^4.3.0",
+    "prompt": "^1.0.0",
+    "string-template": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^23.2.0"
+  }
+}
