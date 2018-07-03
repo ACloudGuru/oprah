@@ -2,7 +2,7 @@
 
 ## Dependencies
 
-- node 8.11.3
+- node 6.10.3
 
 ## Usage
 
