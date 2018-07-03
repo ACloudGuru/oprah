@@ -1,6 +1,6 @@
 'use strict';
 
-const { populateConfig } = require('./populate-config');
+const { populateConfig } = require('../index');
 
 describe('populateConfig', () => {
   let result;
