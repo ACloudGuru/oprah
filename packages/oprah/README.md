@@ -23,6 +23,22 @@ oprah({
   stage: String [Environment]
   service: String [Service name]
   stackName: String [Cloudformation stack name to read outputs from. This can then be accessed in `config/[stage].yaml`],
-  skipSecrets: Boolean [Prompt for secrets]
+});
+```
+
+#### Example
+
+```
+oprah({
+  stage: 'test',
+  service: 'organisations',
+  config: {
+    defaultPath: 'foo.yaml',
+    overridePath: 'bar.yaml'
+  },
+  secret: {
+    requiredPath: 'required-secrets.yaml',
+    skip: true
+  }
 });
 ```

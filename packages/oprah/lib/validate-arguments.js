@@ -1,17 +1,29 @@
 'use strict';
 
+const Joi = require('joi');
 const chalk = require('chalk');
 
-const validateArguments = ({ stage, service }) => {
-  if (!stage) {
-    console.log(chalk.red('Stage is required for configuration. (ie. --stage test)'))
-    process.exit(1);
-  }
+const schema = Joi.object().keys({
+  stage: Joi.string().required(),
+  service: Joi.string().required(),
+  stackName: Joi.string(),
+  config: Joi.object().keys({
+    defaultPath: Joi.string().required(),
+    overridePath: Joi.string().required()
+  }).required(),
+  secret: Joi.object().keys({
+    requiredPath: Joi.string().required(),
+    skip: Joi.boolean()
+  }).required()
+});
 
-  if (!service) {
-    console.log(chalk.red('Service is required for configuration. (ie. --service test)'))
-    process.exit(1);
-  }
+const validateArguments = args => {
+  Joi.validate(args, schema, err => {
+    if (err) {
+      console.log(chalk.red(err))
+      process.exit(1);
+    }
+  });
 }
 
 module.exports = {
