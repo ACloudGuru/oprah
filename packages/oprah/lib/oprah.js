@@ -3,24 +3,22 @@
 const chalk = require('chalk');
 const get = require('lodash.get');
 
-const path = require('path');
-
 const { validateArguments } = require('../lib/validate-arguments');
 const { populateConfig } = require('../lib/populate-config');
 const { populateSecret } = require('../lib/populate-secret');
 const { readCfOutputs } = require('../lib/read-cf-outputs');
 
-const cwd = process.cwd();
+const oprah = args => {
+  validateArguments(args);
 
-const oprah = ({ stage, service, stackName, skipSecrets }) => {
-  validateArguments({ stage, service, stackName, skipSecrets });
+  const { stage, service, stackName } = args;
 
   return readCfOutputs({
     stackName
   })
   .tap(outputs => populateConfig({
-    defaultPath: path.resolve(cwd, `config/default.yaml`),
-    overridePath: path.resolve(cwd, `config/${stage}.yaml`),
+    defaultPath: get(args, 'config.defaultPath'),
+    overridePath: get(args, 'config.overridePath'),
     ssmPath: `/${stage}/${service}/config`,
     variables: Object.assign(
       {},
@@ -31,13 +29,13 @@ const oprah = ({ stage, service, stackName, skipSecrets }) => {
     )
   }))
   .tap(outputs => {
-    if (skipSecrets) {
+    if (get(args, 'secret.skip')) {
       console.log(chalk.yellow('Skipping SSM secrets'))
       return Promise.resolve();
     }
 
     return populateSecret({
-      requiredPath: path.resolve(cwd, `secret/required.yaml`),
+      requiredPath: get(args, 'secret.requiredPath'),
       ssmPath: `/${stage}/${service}/secret`,
       keyId: get(outputs, 'EncryptionKeyAlias')
     });
