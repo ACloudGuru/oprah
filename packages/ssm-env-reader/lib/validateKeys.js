@@ -20,4 +20,4 @@ const validateKeys = (object, paths) => {
   }, {});
 };
 
-module.exports = { validateKeys };
+module.exports = validateKeys;

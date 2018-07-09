@@ -1,6 +1,6 @@
 'use strict';
 
-const { validateKeys } = require('./validateKeys');
+const validateKeys = require('./validateKeys');
 
 describe('#validateKeys', () => {
   it('should throw an error on missing keys', () => {
@@ -12,6 +12,7 @@ describe('#validateKeys', () => {
 
     expect(() => validateKeys(event, ['ssm.SECRET_KEY', 'firebaseRef'])).toThrow(`Could not find path: firebaseRef`);
   });
+
   it('should provide the values of all keys requested', () => {
     const event = {
       ssm: {
