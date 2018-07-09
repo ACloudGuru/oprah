@@ -1,8 +1,6 @@
 'use strict';
 
-const get = require('lodash.get');
-const last = require('lodash.last');
-const isUndefined = require('lodash.isundefined');
+const { get, last, isUndefined } = require('lodash');
 
 const validateKeys = (object, paths) => {
   return paths.reduce((acc, path) => {
