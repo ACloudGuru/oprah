@@ -6,10 +6,6 @@
   "scripts": {
     "test": "jest"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ACloudGuru/tbd.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
