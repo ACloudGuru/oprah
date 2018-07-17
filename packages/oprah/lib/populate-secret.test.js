@@ -46,7 +46,7 @@ describe('#populateSecret', () => {
       secretStore.readRemoteSecrets.mockImplementation(() => Bluebird.resolve({}));
 
       return populateSecret({ requiredPath, ssmPath,  keyId, noninteractive})
-        .catch(error => expect(error.message).toEqual('Missing required configurations!!'));
+        .catch(error => expect(error.message).toEqual('Missing required secrets!!'));
     });
 
     it('should populate secrets', () => {
