@@ -17,7 +17,7 @@ const getAllExistingSecrets = (requiredSecrets, currentSecrets) => {
   const secrets = Object.keys(requiredSecrets)
     .filter((key) => {
       if (!currentSecrets[key]) {
-        console.log(chalk.yellow(`[${key}: ${requiredSecrets[key]}] is missing!`));
+        console.log(chalk.yellow(`Secret missing: [${key}: ${requiredSecrets[key]}]`));
       }
 
       return currentSecrets[key];
@@ -30,7 +30,7 @@ const getAllExistingSecrets = (requiredSecrets, currentSecrets) => {
   const hasMissingSecrets = Object.keys(secrets).length !== Object.keys(requiredSecrets).length;
 
   if (hasMissingSecrets) {
-    console.log(chalk.red('Missing required secrets!! Run on interactive mode to populate them!!'));
+    console.log(chalk.white.bgRed('Missing required secrets!! Run on interactive mode to populate them!!'));
     return Bluebird.reject(new Error('Missing required secrets!!'));
   }
 
@@ -41,7 +41,7 @@ const populateSecret = ({ requiredPath, ssmPath, keyId, noninteractive }) => {
   console.log(chalk.black.bgGreen('Populating secrets in SSM...'));
 
   if(!ssmPath) {
-    console.log(chalk.red('ssmPath is required'));
+    console.log(chalk.white.bgRed('ssmPath is required!!'));
     return Bluebird.reject(new Error('Please specify ssmPath for populateSecret'));
   }
 
@@ -50,7 +50,7 @@ const populateSecret = ({ requiredPath, ssmPath, keyId, noninteractive }) => {
   return readRemoteSecrets({ ssmPath })
     .then(currentSecrets => {
       if (noninteractive === true) {
-        console.log(chalk.blue('Running on non interactive mode..'));
+        console.log(chalk.gray('Running on non interactive mode..'));
         return getAllExistingSecrets(requiredSecrets, currentSecrets);
       }
 
