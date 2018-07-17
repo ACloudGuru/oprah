@@ -6,3 +6,6 @@ ACG npm packages monorepo
 
 * [ ] setup lerna
   * [ ] to use yarn workspaces
+
+- Remove husky
+- Integrate pull-requests with Buildkite
