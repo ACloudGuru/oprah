@@ -17,7 +17,7 @@ const getAllExistingSecrets = (requiredSecrets, currentSecrets) => {
   const secrets = Object.keys(requiredSecrets)
     .filter((key) => {
       if (!currentSecrets[key]) {
-        console.log(chalk.red(`[${key}: ${requiredSecrets[key]}] is missing!`));
+        console.log(chalk.yellow(`[${key}: ${requiredSecrets[key]}] is missing!`));
       }
 
       return currentSecrets[key];
@@ -29,9 +29,12 @@ const getAllExistingSecrets = (requiredSecrets, currentSecrets) => {
 
   const hasMissingSecrets = Object.keys(secrets).length !== Object.keys(requiredSecrets).length;
 
-  return hasMissingSecrets ?
-    Bluebird.reject(new Error('Missing required configurations!!')) :
-    Bluebird.resolve(secrets);
+  if (hasMissingSecrets) {
+    console.log(chalk.red('Missing required secrets!! Run on interactive mode to populate them!!'));
+    return Bluebird.reject(new Error('Missing required secrets!!'));
+  }
+
+  return Bluebird.resolve(secrets);
 };
 
 const populateSecret = ({ requiredPath, ssmPath, keyId, noninteractive }) => {
@@ -47,6 +50,7 @@ const populateSecret = ({ requiredPath, ssmPath, keyId, noninteractive }) => {
   return readRemoteSecrets({ ssmPath })
     .then(currentSecrets => {
       if (noninteractive === true) {
+        console.log(chalk.blue('Running on non interactive mode..'));
         return getAllExistingSecrets(requiredSecrets, currentSecrets);
       }
 
