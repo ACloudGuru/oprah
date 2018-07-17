@@ -1,11 +1,15 @@
 'use strict';
 
-
-const mockExeca = jest.fn(() => Promise.resolve('Finished running serverless'));
+const mockExeca = jest.fn(() => ({
+  then: () => {},
+  stdout: {
+    pipe: () => {}
+  }
+}));
 
 jest.mock('execa', () => mockExeca);
 
-const { runServerless } = require('./run-serverless');
+const { runServerless } = require('../index');
 
 describe('#runServerless', () => {
 
@@ -37,7 +41,7 @@ describe('#runServerless', () => {
     })
     .then(() => {
       expect(mockExeca.mock.calls[0][0]).toEqual('serverless');
-      expect(mockExeca.mock.calls[0][1]).toEqual(['info', '--stage', 'test-auto']);
+      expect(mockExeca.mock.calls[0][1]).toEqual(['deploy', '--stage', 'test-auto']);
       expect(mockExeca.mock.calls[0][2]).toEqual({
         cwd: './mocks'
       });
