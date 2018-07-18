@@ -40,19 +40,32 @@ const makeGraphqlHandler =
       console.error(JSON.stringify({ errors: res.errors, viewer: graphqlContext.viewer }, null, 2))
     }
 
-    callback(null, {
+    const response = {
       statusCode: hasErrors ? 400 : 200,
       headers: CORS_HEADERS,
       body: JSON.stringify(res)
-    });
+    };
+
+    if (!callback) {
+      return response;
+    }
+
+    callback(null, response);
   })
   .catch(err => {
     console.error(err.stack);
-    callback(null, {
+
+    const response = {
       statusCode: 500,
       headers: CORS_HEADERS,
       body: JSON.stringify({ message: 'Unexpected error' })
-    });
+    };
+
+    if (!callback) {
+      return response;
+    }
+
+    callback(null, response);
   });
 };
 
