@@ -1,0 +1,3 @@
+service: mock-resources
+provider:
+  name: aws
