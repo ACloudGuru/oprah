@@ -33,62 +33,130 @@ const graphqlContext = {
 const graphqlHandler = makeGraphqlHandler({ schema, graphqlContext });
 
 describe('makeGraphqlHandler', () => {
-  describe('when a valid query is sent', () => {
-    const callback = jest.fn();
-    beforeAll(() => {
-      const event = {
-        body: JSON.stringify({
-          query: `{ hello }`,
-          variables: {}
-        })
-      };
-      return graphqlHandler({ event, callback })
+  describe('when a callback is provided', () => {
+    describe('when a valid query is sent', () => {
+      const callback = jest.fn();
+      beforeAll(() => {
+        const event = {
+          body: JSON.stringify({
+            query: `{ hello }`,
+            variables: {}
+          })
+        };
+        return graphqlHandler({ event, callback })
+      });
+
+      it('should send a response to the query', () => {
+
+        expect(callback.mock.calls[0][0]).toEqual(null);
+        expect(callback.mock.calls[0][1].statusCode).toEqual(200);
+        expect(callback.mock.calls[0][1].body).toEqual(
+          JSON.stringify({
+            data: {
+              hello: 'hello world'
+            }
+          })
+        );
+      });
+
+      it('should attach CORS header', () => {
+        expect(callback.mock.calls[0][1].headers).toEqual({
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          'Access-Control-Allow-Methods': 'OPTIONS,POST',
+          'Access-Control-Allow-Origin': '*',
+        });
+      });
     });
 
-    it('should send a response to the query', () => {
+    describe('when an error is throw in the graphql context', () => {
+      const callback = jest.fn();
 
-      expect(callback.mock.calls[0][0]).toEqual(null);
-      expect(callback.mock.calls[0][1].statusCode).toEqual(200);
-      expect(callback.mock.calls[0][1].body).toEqual(
-        JSON.stringify({
-          data: {
-            hello: 'hello world'
-          }
-        })
-      );
-    });
+      beforeAll(() => {
+        const event = {
+          body: JSON.stringify({
+            query: `{ bye }`,
+            variables: {}
+          })
+        };
+        return graphqlHandler({ event, callback })
+      });
 
-    it('should attach CORS header', () => {
-      expect(callback.mock.calls[0][1].headers).toEqual({
-        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
-        'Access-Control-Allow-Methods': 'OPTIONS,POST',
-        'Access-Control-Allow-Origin': '*',
+      it('should send a response to the query with statusCode 400', () => {
+        expect(callback.mock.calls[0][0]).toEqual(null);
+        expect(callback.mock.calls[0][1].statusCode).toEqual(400);
+
+        const body = JSON.parse(callback.mock.calls[0][1].body);
+        expect(body.data).toEqual({
+          bye: null
+        });
+        expect(body.errors).toHaveLength(1);
       });
     });
   });
 
-  describe('when an error is throw in the graphql context', () => {
-    const callback = jest.fn();
 
-    beforeAll(() => {
-      const event = {
-        body: JSON.stringify({
-          query: `{ bye }`,
-          variables: {}
+  describe('when callback is not provided', () => {
+    describe('when a valid query is sent', () => {
+      let result;
+
+      beforeAll(() => {
+        const event = {
+          body: JSON.stringify({
+            query: `{ hello }`,
+            variables: {}
+          })
+        };
+        return graphqlHandler({ event })
+        .then(res => {
+          result = res;
         })
-      };
-      return graphqlHandler({ event, callback })
+      });
+
+      it('should send a response to the query', () => {
+        expect(result.statusCode).toEqual(200);
+        expect(result.body).toEqual(
+          JSON.stringify({
+            data: {
+              hello: 'hello world'
+            }
+          })
+        );
+      });
+
+      it('should attach CORS header', () => {
+        expect(result.headers).toEqual({
+          'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+          'Access-Control-Allow-Methods': 'OPTIONS,POST',
+          'Access-Control-Allow-Origin': '*',
+        });
+      });
     });
 
-    it('should send a response to the query with statusCode 400', () => {
-      expect(callback.mock.calls[0][0]).toEqual(null);
-      expect(callback.mock.calls[0][1].statusCode).toEqual(400);
+    describe('when an error is throw in the graphql context', () => {
+      let result;
 
-      const body = JSON.parse(callback.mock.calls[0][1].body);
-      expect(body.data).toEqual({
-        bye: null
+      beforeAll(() => {
+        const event = {
+          body: JSON.stringify({
+            query: `{ bye }`,
+            variables: {}
+          })
+        };
+        return graphqlHandler({ event })
+        .then(res => {
+          result = res;
+        })
       });
-      expect(body.errors).toHaveLength(1);
+
+      it('should send a response to the query with statusCode 400', () => {
+        expect(result.statusCode).toEqual(400);
+
+        const body = JSON.parse(result.body);
+        expect(body.data).toEqual({
+          bye: null
+        });
+        expect(body.errors).toHaveLength(1);
+      });
     });
   });
 });
