@@ -16,29 +16,33 @@ If an override file is specified in `config/[stage].yaml`, the override file wil
 
 Required secrets can be specified in `secret/required.yaml`. Every key specified in this file will prompt the user for a value when `configure.sh` is run.
 
-### Applying config
+```
+populateConfig({
+  defaultPath,
+  overridePath,
+  ssmPath,
+  variables = {}
+})
+```
 
 ```
-oprah({
-  stage: String [Environment]
-  service: String [Service name]
-  stackName: String [Cloudformation stack name to read outputs from. This can then be accessed in `config/[stage].yaml`],
-});
+populateSecret({
+  requiredPath,
+  ssmPath,
+  keyId,
+  noninteractive
+})
 ```
 
-#### Example
+```
+readCfOutputs({
+  stackName
+})
+```
 
 ```
-oprah({
-  stage: 'test',
-  service: 'organisations',
-  config: {
-    defaultPath: 'foo.yaml',
-    overridePath: 'bar.yaml'
-  },
-  secret: {
-    requiredPath: 'required-secrets.yaml',
-    skip: true
-  }
-});
+runServerless({
+  serverlessYamlDirectory,
+  stage
+})
 ```
