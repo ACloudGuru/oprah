@@ -78,7 +78,7 @@ const populateSecret = ({ requiredPath, ssmPath, keyId, noninteractive }) => {
         keyId
       });
 
-      return Bluebird.map(updaters, updater => updater(), { concurrency: 5 });
+      return Bluebird.mapSeries(updaters, updater => updater().delay(500));
     });
 };
 

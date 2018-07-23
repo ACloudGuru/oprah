@@ -36,7 +36,7 @@ const populateConfig = ({ defaultPath, overridePath, ssmPath, variables = {} }) 
       ssmPath
     });
 
-    return Bluebird.map(updaters, updater => updater(), { concurrency: 5 });
+    return Bluebird.mapSeries(updaters, updater => updater().delay(500));
   });
 };
 
