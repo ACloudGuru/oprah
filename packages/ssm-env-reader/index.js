@@ -2,7 +2,7 @@
 
 const makeSsmEnvReader = require('./lib/makeSsmEnvReader');
 const validateKeys = require('./lib/validateKeys');
-const { makeGetParameters } = require('./lib/makeGetParameters');
+const { getParameters } = require('./lib/getParameters');
 
 module.exports = {
   ssmEnvReader: makeSsmEnvReader({
@@ -11,5 +11,5 @@ module.exports = {
     getCurrentDate: () => new Date().toISOString()
   }),
   validateKeys: validateKeys,
-  makeGetParameters
+  getParameters
 };

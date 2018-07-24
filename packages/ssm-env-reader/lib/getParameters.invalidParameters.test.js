@@ -26,30 +26,22 @@ ssm.getParameters
       {
         Name: '/path/to/first',
         Value: '1st'
+      },
+      {
+        Name: '/path/to/third',
+        Value: '3rd'
       }
     ],
     InvalidParameters: [
       '/path/to/second'
     ]
   })
-}))
-.mockImplementationOnce(() => ({
-  promise: () => Promise.resolve({
-    Parameters: [
-      {
-        Name: '/path/to/third',
-        Value: '3rd'
-      }
-    ],
-    InvalidParameters: []
-  })
 }));
 
-const { makeGetParameters } = require('../index');
+const { getParameters } = require('../index');
 
-const getParameters = makeGetParameters({ chunkSize: 2 });
 
-describe('#makeGetParameters - invalidParameters', () => {
+describe('#getParameters - invalidParameters', () => {
   const request = () => getParameters({
     paths: [
       '/path/to/first',

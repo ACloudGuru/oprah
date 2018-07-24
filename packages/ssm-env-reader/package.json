@@ -20,6 +20,7 @@
   "dependencies": {
     "aws-sdk": "^2.207.0",
     "bluebird": "^3.5.1",
+    "dataloader": "^1.4.0",
     "date-fns": "^1.29.0",
     "lodash": "^4.17.10"
   },
