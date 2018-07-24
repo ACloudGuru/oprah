@@ -4,8 +4,6 @@ const Bluebird = require('bluebird');
 const { chunk, get, last } = require('lodash');
 
 const AWS = require('aws-sdk');
-AWS.config.setPromisesDependency(require('bluebird'));
-AWS.config.update({ region: 'us-east-1' }); // remove
 
 const ssm = new AWS.SSM({ apiVersion: '2014-11-06' });
 
@@ -41,7 +39,9 @@ const chunkGetParameters = ({ chunkSize = 10, paths = [] }) => {
 
 const validateParameters = ({ InvalidParameters }) => {
   if (InvalidParameters.length) {
-    return Bluebird.reject(new Error(`Unable to fetch ${InvalidParameters}`))
+    const error = new Error(`Unable to fetch ${InvalidParameters}`);
+    console.error(error);
+    return Bluebird.reject(error);
   }
 };
 
