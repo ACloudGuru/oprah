@@ -2,6 +2,7 @@
 
 const Bluebird = require('bluebird');
 const { chunk, get, last } = require('lodash');
+const { addMilliseconds, isAfter } = require('date-fns');
 
 const AWS = require('aws-sdk');
 
@@ -62,22 +63,24 @@ const generateParameterMap = ({ Parameters }) => {
   );
 }
 
+const getParameters = ({ chunkSize, paths }) => chunkGetParameters({ chunkSize, paths })
+  .tap(validateParameters)
+  .then(generateParameterMap);
 
 module.exports = {
   makeGetParameters: (options) => {
     let getParametersPromise;
+    const chunkSize = get(options, 'chunkSize');
+
     return ({ paths }) => {
-      if (getParametersPromise) {
-        return getParametersPromise;
+      if (!getParametersPromise) {
+        getParametersPromise = getParameters({
+          chunkSize,
+          paths
+        });
       }
 
-      const chunkSize = get(options, 'chunkSize');
-
-      getParametersPromise = chunkGetParameters({ chunkSize, paths })
-        .tap(validateParameters)
-        .then(generateParameterMap);
-
-      return getParametersPromise
+      return getParametersPromise;
     };
   }
 };
