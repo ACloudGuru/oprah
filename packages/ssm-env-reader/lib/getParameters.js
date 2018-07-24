@@ -20,7 +20,7 @@ const getSSMParameters = ({ paths = [] }) => {
     }).promise())
 }
 
-const validateParameters = ({ InvalidParameters }) => {
+const validateParameters = ({ InvalidParameters = [] }) => {
   if (InvalidParameters.length) {
     const error = new Error(`Unable to fetch ${InvalidParameters}`);
     console.error(error);
