@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const get = require('lodash.get');
 const { SchemaDirectiveVisitor } = require('graphql-tools');
@@ -52,8 +52,27 @@ const generateEnum = enumValues => enumValues.reduce(
 
 const RoleType = new GraphQLEnumType({
   name: 'Role',
-  values: generateEnum(['SERVER', 'ADMIN', 'ORGANISATION_ADMIN', 'VIEWER'])
+  values: generateEnum(['SERVER', 'ADMIN', 'ORGANISATION_ADMIN', 'VIEWER', 'BFF'])
 });
+
+const isServer = viewer => get(viewer, 'server') === true;
+const isBff = viewer => get(viewer, 'bff') === true;
+const isAdmin = viewer => get(viewer, 'roles.admin') === true;
+const isViewer = viewer => !!get(viewer, 'id');
+const isOrganisationAdmin = viewer => {
+  const roles = get(viewer, 'roles') || {};
+  const organisationId = get(viewer, 'organisationId');
+
+  return roles[`organisationAdmin_${organisationId}`] === true;
+};
+
+const hasPermission = (roles, viewer) => {
+  return roles.includes('SERVER') && isServer(viewer) ||
+        roles.includes('ADMIN') && isAdmin(viewer) ||
+        roles.includes('ORGANISATION_ADMIN') && isOrganisationAdmin(viewer) ||
+        roles.includes('VIEWER') && isViewer(viewer) ||
+        roles.includes('BFF') && isBff(viewer);
+};
 
 class AuthDirective extends SchemaDirectiveVisitor {
   static getDirectiveDeclaration(directiveName, schema) {
@@ -83,18 +102,13 @@ class AuthDirective extends SchemaDirectiveVisitor {
     const roles = get(this, 'args.roles') || [];
     const throwError = get(this, 'args.throwError') || false;
     const resolve = get(field, 'resolve') || defaultFieldResolver;
-    field.description = `restricted to: [${roles}]`
+    field.description = `restricted to: [${roles}]`;
     field.resolve = (...resolveArgs) => {
       // resolveArgs [root, args, context, info]
       const context = get(resolveArgs, '2') || {};
       const viewer = get(context, 'viewer') || {};
 
-      const hasPermission = roles.includes('SERVER') && isServer(viewer)
-      || roles.includes('ADMIN') && isAdmin(viewer)
-      || roles.includes('ORGANISATION_ADMIN') && isOrganisationAdmin(viewer)
-      || roles.includes('VIEWER') && isViewer(viewer);
-
-      if (hasPermission) {
+      if (hasPermission(roles, viewer)) {
         return resolve.apply(this, resolveArgs);
       }
 
@@ -107,14 +121,5 @@ class AuthDirective extends SchemaDirectiveVisitor {
   }
 }
 
-const isServer = viewer => !!get(viewer, 'server');
-const isAdmin = viewer => !!get(viewer, 'roles.admin');
-const isOrganisationAdmin = viewer => {
-  const roles = get(viewer, 'roles') || {};
-  const organisationId = get(viewer, 'organisationId');
-
-  return !!roles[`organisationAdmin_${organisationId}`];
-};
-const isViewer = viewer => !!get(viewer, 'id');
 
 module.exports = AuthDirective;
