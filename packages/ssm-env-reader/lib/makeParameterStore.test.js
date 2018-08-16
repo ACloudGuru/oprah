@@ -27,6 +27,42 @@ describe('#ParameterStore', () => {
       });
   });
 
+  it ('should return configs for a given keys', () => {
+    const configPath = '/stage/config';
+    const secretPath = '/stage/secret';
+
+    mockGetParameters.mockImplementation(() => Promise.resolve(['config 1', 'config 2']));
+
+    const parameterStore = makeParameterStore({ configPath, secretPath });
+
+    return parameterStore
+      .getConfigs(['CONFIG_1', 'CONFIG_2'])
+      .then(configs => {
+        expect(configs).toEqual(['config 1', 'config 2']);
+        expect(mockGetParameters.mock.calls[0][0]).toEqual({
+          paths: [ '/stage/config/CONFIG_1', '/stage/config/CONFIG_2' ]
+        });
+      });
+  });
+
+  it ('should return secrets for a given keys', () => {
+    const configPath = '/stage/config';
+    const secretPath = '/stage/secret';
+
+    mockGetParameters.mockImplementation(() => Promise.resolve(['secret 1', 'secret 2']));
+
+    const parameterStore = makeParameterStore({ configPath, secretPath });
+
+    return parameterStore
+      .getSecrets(['SECRET_1', 'SECRET_2'])
+      .then(secrets => {
+        expect(secrets).toEqual(['secret 1', 'secret 2']);
+        expect(mockGetParameters.mock.calls[0][0]).toEqual({
+          paths: [ '/stage/secret/SECRET_1', '/stage/secret/SECRET_2' ]
+        });
+      });
+  });
+
   it ('should return secret for a given key', () => {
     const configPath = '/stage/config';
     const secretPath = '/stage/secret';
