@@ -54,7 +54,7 @@ describe('#ParameterStore', () => {
     return parameterStore
       .getConfigs(['CONFIG_1', 'CONFIG_2'])
       .then(configs => {
-        expect(configs).toEqual(['config 1', 'config 2']);
+        expect(configs).toEqual({ CONFIG_1: 'config 1', CONFIG_2: 'config 2' });
         expect(mockGetParameters.mock.calls[0][0]).toEqual({
           Names: [ '/stage/config/CONFIG_1', '/stage/config/CONFIG_2' ],
           WithDecryption: true
@@ -72,7 +72,7 @@ describe('#ParameterStore', () => {
     return parameterStore
       .getSecrets(['SECRET_1', 'SECRET_2'])
       .then(secrets => {
-        expect(secrets).toEqual(['secret 1', 'secret 2']);
+        expect(secrets).toEqual({ SECRET_1: 'secret 1', SECRET_2: 'secret 2' });
         expect(mockGetParameters.mock.calls[0][0]).toEqual({
           Names: [ '/stage/secret/SECRET_1', '/stage/secret/SECRET_2' ],
           WithDecryption: true
@@ -149,13 +149,13 @@ describe('#ParameterStore', () => {
       jest.clearAllMocks();
     }))
     .then(() => parameterStore.getSecrets(['SECRET_1', 'SECRET_2']).then(secrets => {
-      expect(secrets).toEqual(['secret 1', 'secret 2']);
+      expect(secrets).toEqual({ SECRET_1: 'secret 1', SECRET_2: 'secret 2' });
       expect(mockGetParameters.mock.calls[0]).toBeUndefined();
 
       jest.clearAllMocks();
     }))
-    .then(() => parameterStore.getConfigs(['CONFIG_1', 'CONFIG_2']).then(configs => {
-      expect(configs).toEqual(['config 1', 'config 2']);
+    .then(() => parameterStore.getConfigs(['CONFIG_1', 'CONFIG_2']).then(secrets => {
+      expect(secrets).toEqual({ CONFIG_1: 'config 1', CONFIG_2: 'config 2' });
 
       expect(mockGetParameters.mock.calls[0][0]).toEqual({
         Names: [ '/stage/config/CONFIG_2' ],
