@@ -30,7 +30,7 @@ describe('#ParameterStore', () => {
     const configPath = '/stage/config';
     const secretPath = '/stage/secret';
 
-    const { makeParameterStore } = require('./makeParameterStore');
+    const { makeParameterStore } = require('../index');
     const parameterStore = makeParameterStore({ configPath, secretPath });
 
     return parameterStore

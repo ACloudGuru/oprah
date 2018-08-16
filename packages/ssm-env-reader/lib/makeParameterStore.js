@@ -1,6 +1,6 @@
 'use strict';
 
-const { getParameters } = require('../index');
+const { getParameters } = require('./getParameters');
 
 const makeParameterStore = ({ configPath, secretPath }) => {
 
