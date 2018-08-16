@@ -1,28 +1,45 @@
 'use strict';
 
 const mockGetParameters = jest.fn();
-jest.mock('./getParameters', () => ({ getParameters: mockGetParameters }));
 
-const { makeParameterStore } = require('./makeParameterStore');
+jest.mock('aws-sdk', () => ({
+    SSM: function() {
+        return { getParameters: mockGetParameters };
+    }
+}));
+
+mockGetParameters.mockImplementation(() => ({
+  promise: () => Promise.resolve({
+    Parameters: [
+      { Name: '/stage/config/CONFIG_1', Value: 'config 1' },
+      { Name: '/stage/config/CONFIG_2', Value: 'config 2' },
+      { Name: '/stage/secret/SECRET_1', Value: 'secret 1' },
+      { Name: '/stage/secret/SECRET_2', Value: 'secret 2' },
+    ]
+  })
+}));
 
 describe('#ParameterStore', () => {
 
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.resetModules();
+  });
 
   it ('should return a config for a given key', () => {
     const configPath = '/stage/config';
     const secretPath = '/stage/secret';
 
-    mockGetParameters.mockImplementation(() => Promise.resolve(['config value']));
-
+    const { makeParameterStore } = require('./makeParameterStore');
     const parameterStore = makeParameterStore({ configPath, secretPath });
 
     return parameterStore
-      .getConfig('SOME_CONFIG')
+      .getConfig('CONFIG_1')
       .then(config => {
-        expect(config).toEqual('config value');
+        expect(config).toEqual('config 1');
         expect(mockGetParameters.mock.calls[0][0]).toEqual({
-          paths: [ '/stage/config/SOME_CONFIG' ]
+          Names: [ '/stage/config/CONFIG_1' ],
+          WithDecryption: true
         });
       });
   });
@@ -31,8 +48,7 @@ describe('#ParameterStore', () => {
     const configPath = '/stage/config';
     const secretPath = '/stage/secret';
 
-    mockGetParameters.mockImplementation(() => Promise.resolve(['config 1', 'config 2']));
-
+    const { makeParameterStore } = require('./makeParameterStore');
     const parameterStore = makeParameterStore({ configPath, secretPath });
 
     return parameterStore
@@ -40,7 +56,8 @@ describe('#ParameterStore', () => {
       .then(configs => {
         expect(configs).toEqual(['config 1', 'config 2']);
         expect(mockGetParameters.mock.calls[0][0]).toEqual({
-          paths: [ '/stage/config/CONFIG_1', '/stage/config/CONFIG_2' ]
+          Names: [ '/stage/config/CONFIG_1', '/stage/config/CONFIG_2' ],
+          WithDecryption: true
         });
       });
   });
@@ -49,8 +66,7 @@ describe('#ParameterStore', () => {
     const configPath = '/stage/config';
     const secretPath = '/stage/secret';
 
-    mockGetParameters.mockImplementation(() => Promise.resolve(['secret 1', 'secret 2']));
-
+    const { makeParameterStore } = require('./makeParameterStore');
     const parameterStore = makeParameterStore({ configPath, secretPath });
 
     return parameterStore
@@ -58,7 +74,8 @@ describe('#ParameterStore', () => {
       .then(secrets => {
         expect(secrets).toEqual(['secret 1', 'secret 2']);
         expect(mockGetParameters.mock.calls[0][0]).toEqual({
-          paths: [ '/stage/secret/SECRET_1', '/stage/secret/SECRET_2' ]
+          Names: [ '/stage/secret/SECRET_1', '/stage/secret/SECRET_2' ],
+          WithDecryption: true
         });
       });
   });
@@ -67,18 +84,90 @@ describe('#ParameterStore', () => {
     const configPath = '/stage/config';
     const secretPath = '/stage/secret';
 
-    mockGetParameters.mockImplementation(() => Promise.resolve(['secret value']));
-
+    const { makeParameterStore } = require('./makeParameterStore');
     const parameterStore = makeParameterStore({ configPath, secretPath });
 
     return parameterStore
-      .getSecret('SOME_SECRET')
+      .getSecret('SECRET_1')
       .then(secret => {
-        expect(secret).toEqual('secret value');
+        expect(secret).toEqual('secret 1');
         expect(mockGetParameters.mock.calls[0][0]).toEqual({
-          paths: [ '/stage/secret/SOME_SECRET' ]
+          Names: [ '/stage/secret/SECRET_1' ],
+          WithDecryption: true
         });
       });
   });
 
+  it('should cache the keys once retrieved from ssm', () => {
+    const configPath = '/stage/config';
+    const secretPath = '/stage/secret';
+
+    const { makeParameterStore } = require('./makeParameterStore');
+    const parameterStore = makeParameterStore({ configPath, secretPath });
+
+    return Promise.all([
+      parameterStore.getSecret('SECRET_1'),
+      parameterStore.getConfig('CONFIG_1')
+    ])
+    .then(([secret, config]) => {
+      expect(secret).toEqual('secret 1');
+      expect(config).toEqual('config 1');
+
+      expect(mockGetParameters.mock.calls[0][0]).toEqual({
+        Names: [ '/stage/secret/SECRET_1', '/stage/config/CONFIG_1' ],
+        WithDecryption: true
+      });
+
+      jest.clearAllMocks();
+    })
+    .then(() => parameterStore.getSecret('SECRET_1').then(secret => {
+      expect(secret).toEqual('secret 1');
+      expect(mockGetParameters.mock.calls[0]).toBeUndefined();
+
+      jest.clearAllMocks();
+    }))
+    .then(() => parameterStore.getConfig('CONFIG_1').then(config => {
+      expect(config).toEqual('config 1');
+      expect(mockGetParameters.mock.calls[0]).toBeUndefined();
+
+      jest.clearAllMocks();
+    }))
+    .then(() => parameterStore.getSecret('SECRET_2').then(secret => {
+      expect(secret).toEqual('secret 2');
+
+      expect(mockGetParameters.mock.calls[0][0]).toEqual({
+        Names: [ '/stage/secret/SECRET_2' ],
+        WithDecryption: true
+      });
+
+      jest.clearAllMocks();
+    }))
+    .then(() => parameterStore.getSecret('SECRET_2').then(secret => {
+      expect(secret).toEqual('secret 2');
+      expect(mockGetParameters.mock.calls[0]).toBeUndefined();
+
+      jest.clearAllMocks();
+    }))
+    .then(() => parameterStore.getSecrets(['SECRET_1', 'SECRET_2']).then(secrets => {
+      expect(secrets).toEqual(['secret 1', 'secret 2']);
+      expect(mockGetParameters.mock.calls[0]).toBeUndefined();
+
+      jest.clearAllMocks();
+    }))
+    .then(() => parameterStore.getConfigs(['CONFIG_1', 'CONFIG_2']).then(configs => {
+      expect(configs).toEqual(['config 1', 'config 2']);
+
+      expect(mockGetParameters.mock.calls[0][0]).toEqual({
+        Names: [ '/stage/config/CONFIG_2' ],
+        WithDecryption: true
+      });
+
+      jest.clearAllMocks();
+    }));
+  });
 });
+
+
+
+
+
