@@ -10,7 +10,13 @@ const makeParameterStore = ({ configPath, secretPath }) => {
 
   const getMultipleParameters = (path, keys) => {
     const paths = keys.map(key => `${path}/${key}`);
-    return getParameters({ paths });
+
+    return getParameters({ paths }).then(parameters => {
+      return parameters.reduce(
+        (acc, parameter, index) => Object.assign({}, acc, { [keys[index]]: parameter }),
+        {}
+      );
+    });
   };
 
   const getConfig = key => getSingleParameter(configPath, key);
