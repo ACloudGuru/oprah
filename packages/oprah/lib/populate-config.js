@@ -9,8 +9,9 @@ const isEmpty = require('lodash.isempty');
 
 const { readYaml } = require('../lib/read-yaml');
 const { generateConfigUpdaters } = require('../lib/secret-store');
+const { promptRequiredConfigs } = require('./prompt-required-configs');
 
-const populateConfig = ({ defaultPath, overridePath, ssmPath, variables = {} }) => {
+const populateConfig = ({ defaultPath, requiredPath, overridePath, ssmPath, noninteractive, variables = {} }) => {
   console.log(chalk.black.bgGreen('Populating configuration in SSM...'));
 
   if(!ssmPath) {
@@ -29,7 +30,10 @@ const populateConfig = ({ defaultPath, overridePath, ssmPath, variables = {} }) 
 
   const interpolatedConfig = mapValues(mergedConfig, value => format(value.toString(), variables));
 
-  return Bluebird.resolve(interpolatedConfig)
+  const requiredConfigs = requiredPath ? readYaml({ pathName: requiredPath }) : {};
+
+  return promptRequiredConfigs({ ssmPath, requiredConfigs, noninteractive })
+  .then(config => Object.assign(config, interpolatedConfig))
   .then(config => {
     const updaters = generateConfigUpdaters({
       config,

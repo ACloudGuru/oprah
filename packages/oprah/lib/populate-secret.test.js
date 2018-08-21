@@ -19,7 +19,7 @@ jest.mock('aws-sdk', () => ({
 
 
 const secretStore = require('../lib/secret-store');
-secretStore.readRemoteSecrets = jest.fn();
+secretStore.readRemoteConfigs = jest.fn();
 
 const { populateSecret } = require('../index');
 
@@ -43,15 +43,15 @@ describe('#populateSecret', () => {
     const noninteractive = true;
 
     it('should throw error if required config is not already populated', () => {
-      secretStore.readRemoteSecrets.mockImplementation(() => Bluebird.resolve({}));
+      secretStore.readRemoteConfigs.mockImplementation(() => Bluebird.resolve({}));
 
       return populateSecret({ requiredPath, ssmPath,  keyId, noninteractive})
-        .catch(error => expect(error.message).toEqual('Missing required secrets!!'));
+        .catch(error => expect(error.message).toEqual('Missing required configs!!'));
     });
 
     it('should populate secrets', () => {
       const secrets = { REQUIRED_SECRET: '123', ANOTHER_REQUIRED_SECRET: '234' };
-      secretStore.readRemoteSecrets.mockImplementation(() => Bluebird.resolve(secrets));
+      secretStore.readRemoteConfigs.mockImplementation(() => Bluebird.resolve(secrets));
       mockPut.mockImplementation(() => ({ promise: () => Bluebird.resolve(true) }));
 
       return populateSecret({ requiredPath, ssmPath,  keyId, noninteractive})
