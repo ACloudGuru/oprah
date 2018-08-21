@@ -10,6 +10,15 @@ const entries = require('lodash.topairs');
 const chalk = require('chalk');
 const get = require('lodash.get');
 
+function upload(params) {
+  const log = params.Type === 'SecureString' ?
+    () => console.log(chalk.grey(`Updating secret: Name: ${params.Name} | Value: [${params.Value.length} chars]`)) :
+    () => console.log(chalk.grey(`Updating config: Name: ${params.Name} | Value: [${params.Value}]`));
+
+  log();
+  return ssm.putParameter(params).promise();
+}
+
 function generateConfigUpdaters({ ssmPath, config }) {
   return entries(config)
     .map(([key, value]) => {
@@ -41,30 +50,6 @@ function generateSecretUpdaters({ ssmPath, secrets, keyId }) {
     });
 }
 
-function readRemoteSecrets({ ssmPath }) {
-  return getAllSecretsUnderPath({
-    Path: ssmPath
-  })
-  .then(allSecrets => {
-    return allSecrets.reduce((acc, parameterObject) => {
-      const parameterPath = get(parameterObject, 'Name') || '';
-      const key = parameterPath.split('/').pop();
-
-      if (!key) {
-        return acc;
-      }
-
-      return Object.assign(
-        {},
-        acc,
-        {
-          [key]: get(parameterObject, 'Value')
-        }
-      );
-    }, {});
-  });
-}
-
 function getAllSecretsUnderPath({ Path, NextToken, Acc }) {
   return ssm.getParametersByPath({
     Path,
@@ -88,18 +73,32 @@ function getAllSecretsUnderPath({ Path, NextToken, Acc }) {
   .catch(() => []);
 }
 
+function accumulateConfigs(allConfigs) {
+  return allConfigs.reduce((acc, parameterObject) => {
+    const parameterPath = get(parameterObject, 'Name') || '';
+    const key = parameterPath.split('/').pop();
 
-function upload(params) {
-  const log = params.Type === 'SecureString'
-  ? () => console.log(chalk.grey(`Updating secret: Name: ${params.Name} | Value: [${params.Value.length} chars]`))
-  : () => console.log(chalk.grey(`Updating config: Name: ${params.Name} | Value: [${params.Value}]`));
+    if (!key) {
+      return acc;
+    }
 
-  log();
-  return ssm.putParameter(params).promise();
+    return Object.assign(
+      {},
+      acc,
+      {
+        [key]: get(parameterObject, 'Value')
+      }
+    );
+  }, {});
+}
+
+function readRemoteConfigs({ ssmPath }) {
+  return getAllSecretsUnderPath({ Path: ssmPath })
+    .then(accumulateConfigs);
 }
 
 module.exports = {
   generateConfigUpdaters,
   generateSecretUpdaters,
-  readRemoteSecrets
-}
+  readRemoteConfigs
+};
