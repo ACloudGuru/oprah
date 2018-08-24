@@ -18,11 +18,32 @@ const {
 //   server: true
 // }
 
+// BFF
+// viewer: {
+//   bff: true
+// }
+
 // ADMIN
 // viewer: {
 //   id: 'google|80dffa9b5ff74089071'
 //   roles: {
 //     admin: true
+//   }
+// }
+
+// INSTRUCTOR
+// viewer: {
+//   id: 'google|80dffa9b5ff74089071'
+//   roles: {
+//     instructor: true
+//   }
+// }
+
+// EDITOR
+// viewer: {
+//   id: 'google|80dffa9b5ff74089071'
+//   roles: {
+//     editor: true
 //   }
 // }
 
@@ -52,12 +73,14 @@ const generateEnum = enumValues => enumValues.reduce(
 
 const RoleType = new GraphQLEnumType({
   name: 'Role',
-  values: generateEnum(['SERVER', 'ADMIN', 'ORGANISATION_ADMIN', 'VIEWER', 'BFF'])
+  values: generateEnum(['SERVER', 'ADMIN', 'ORGANISATION_ADMIN', 'VIEWER', 'BFF', 'EDITOR', 'INSTRUCTOR'])
 });
 
 const isServer = viewer => get(viewer, 'server') === true;
 const isBff = viewer => get(viewer, 'bff') === true;
 const isAdmin = viewer => get(viewer, 'roles.admin') === true;
+const isEditor = viewer => get(viewer, 'roles.editor') === true;
+const isInstructor = viewer => get(viewer, 'roles.instructor') === true;
 const isViewer = viewer => !!get(viewer, 'id');
 const isOrganisationAdmin = viewer => {
   const roles = get(viewer, 'roles') || {};
@@ -69,6 +92,8 @@ const isOrganisationAdmin = viewer => {
 const hasPermission = (roles, viewer) => {
   return roles.includes('SERVER') && isServer(viewer) ||
         roles.includes('ADMIN') && isAdmin(viewer) ||
+        roles.includes('EDITOR') && isEditor(viewer) ||
+        roles.includes('INSTRUCTOR') && isInstructor(viewer) ||
         roles.includes('ORGANISATION_ADMIN') && isOrganisationAdmin(viewer) ||
         roles.includes('VIEWER') && isViewer(viewer) ||
         roles.includes('BFF') && isBff(viewer);

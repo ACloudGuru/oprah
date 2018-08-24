@@ -9,6 +9,18 @@ module.exports = {
       admin: true
     }
   }),
+  generateEditorViewer: () => ({
+    id: 'editor123',
+    roles: {
+      editor: true
+    }
+  }),
+  generateInstructorViewer: () => ({
+    id: 'instructor123',
+    roles: {
+      instructor: true
+    }
+  }),
   generateOrganisationAdminViewer: () => ({
     id: 'validOrgAdmin',
     organisationId: 'org123',
