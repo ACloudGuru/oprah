@@ -24,7 +24,6 @@
     "lodash.isempty": "^4.4.0",
     "lodash.map": "^4.6.0",
     "lodash.mapvalues": "^4.6.0",
-    "lodash.merge": "^4.6.1",
     "lodash.property": "^4.4.2",
     "lodash.template": "^4.4.0",
     "lodash.topairs": "^4.3.0",
