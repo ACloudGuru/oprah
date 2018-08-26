@@ -1,0 +1,21 @@
+service: oprah-service
+provider: ssm
+cfOutputs:
+  - acloudguru-custom-resources-${stage}
+serverless:
+  config: ./serverless.yml
+  outputs:
+    LAMBDA_EXECUTION_ROLE: "{lambdaExecutionRole}"
+    KEY_ALIAS: "{encryptionKeyAlias}"
+config:
+  path: /${stage}/oprah/config
+  defaults:
+    DB_NAME: my-database
+    DB_HOST: 3200
+  required:
+    DB_TABLE: "some database table name"
+secret:
+  path: /${stage}/oprah/secret
+  requied:
+    DB_PASSWORD: "secret database password"
+
