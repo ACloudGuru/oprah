@@ -3,11 +3,11 @@ provider: ssm
 cfOutputs:
   - acloudguru-custom-resources-${stage}
   - test
-serverless:
-  config: ./serverless.yml
-  outputs:
-    LAMBDA_EXECUTION_ROLE: lambdaExecutionRole
-    KEY_ALIAS: encryptionKeyAlias
+# serverless:
+#   configDir: ./examples
+#   outputs:
+#     LAMBDA_EXECUTION_ROLE: lambdaRole
+#     KEY_ALIAS: keyAlias
 config:
   path: /${stage}/oprah/config
   defaults:

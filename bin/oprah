@@ -5,7 +5,7 @@
 const pjson = require('../package.json');
 const program = require('commander');
 const { makeOprah } = require('../lib/makeOprah');
-const { logError } = require('../lib/utils/logger');
+const { logError, logInfo } = require('../lib/utils/logger');
 
 program
   .version(pjson.version)
@@ -38,4 +38,7 @@ const params = {
   variables: Object.assign({}, variables, { stage: program.stage })
 };
 
-makeOprah({ params }).run().catch(error => logError(error.message));
+makeOprah({ params })
+  .run()
+  .tap(() => logInfo('Done.'))
+  .catch(error => logError(error.message));
