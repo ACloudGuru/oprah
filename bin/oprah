@@ -8,9 +8,10 @@ const { makeOprah } = require('../lib/makeOprah');
 const { logError } = require('../lib/utils/logger');
 
 program
-  .version(pjson.version, '-v, --version')
+  .version(pjson.version)
   .option('-s, --stage [stage]', 'Specify stage to run on. (required)')
   .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml')
+  .option('-v, --variables [variables]', 'Variables used for config interpolation.', '{ stage }')
   .option('-i, --interactive', 'Run on interactive mode')
   .parse(process.argv);
 
@@ -19,10 +20,20 @@ if (!program.stage) {
   program.help();
 }
 
+let variables = {};
+
+try {
+  variables = JSON.parse(program.variables);
+} catch(error) {
+  logError(`Variables must be in JSON format!! ${error.message}.`);
+  program.help();
+}
+
 const params = {
   stage: program.stage,
   interactive: program.interactive,
-  config: program.config
+  config: program.config || 'oprah.yml',
+  variables: Object.assign({}, variables, { stage: program.stage })
 };
 
 try {
