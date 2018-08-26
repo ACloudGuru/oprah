@@ -1,12 +1,14 @@
 service: oprah-service
 provider: ssm
+kmsKey: content-key-${stage}
 cfOutputs:
   - acloudguru-custom-resources-${stage}
+  - test
 serverless:
   config: ./serverless.yml
   outputs:
-    LAMBDA_EXECUTION_ROLE: "{lambdaExecutionRole}"
-    KEY_ALIAS: "{encryptionKeyAlias}"
+    LAMBDA_EXECUTION_ROLE: lambdaExecutionRole
+    KEY_ALIAS: encryptionKeyAlias
 config:
   path: /${stage}/oprah/config
   defaults:
