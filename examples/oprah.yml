@@ -13,7 +13,7 @@ config:
     DB_NAME: my-database
     DB_HOST: 3200
   required:
-    DB_TABLE: "some database table name"
+    DB_TABLE: "some database table name for ${stage}"
 secret:
   path: /${stage}/oprah/secret
   requied:

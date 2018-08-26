@@ -17,6 +17,7 @@
     "aws-sdk": "^2.263.1",
     "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
+    "deep-map": "^1.5.0",
     "execa": "^0.10.0",
     "js-yaml": "^3.12.0",
     "lodash.get": "^4.4.2",
@@ -25,9 +26,9 @@
     "lodash.mapvalues": "^4.6.0",
     "lodash.merge": "^4.6.1",
     "lodash.property": "^4.4.2",
+    "lodash.template": "^4.4.0",
     "lodash.topairs": "^4.3.0",
-    "prompt": "^1.0.0",
-    "string-template": "^1.0.0"
+    "prompt": "^1.0.0"
   },
   "devDependencies": {
     "commander": "^2.17.1",

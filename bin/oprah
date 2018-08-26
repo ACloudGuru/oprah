@@ -11,7 +11,7 @@ program
   .version(pjson.version)
   .option('-s, --stage [stage]', 'Specify stage to run on. (required)')
   .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml')
-  .option('-v, --variables [variables]', 'Variables used for config interpolation.', '{ stage }')
+  .option('-v, --variables [variables]', 'Variables used for config interpolation.')
   .option('-i, --interactive', 'Run on interactive mode')
   .parse(process.argv);
 
@@ -23,7 +23,9 @@ if (!program.stage) {
 let variables = {};
 
 try {
-  variables = JSON.parse(program.variables);
+  if (program.variables) {
+    variables = JSON.parse(program.variables);
+  }
 } catch(error) {
   logError(`Variables must be in JSON format!! ${error.message}.`);
   program.help();
