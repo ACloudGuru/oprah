@@ -2,9 +2,31 @@
 
 'use strict'
 
+const pjson = require('../package.json');
+const program = require('commander');
 const { makeOprah } = require('../lib/makeOprah');
+const { logError } = require('../lib/utils/logger');
 
-const params = {};
+program
+  .version(pjson.version, '-v, --version')
+  .option('-s, --stage [stage]', 'Specify stage to run on. (required)')
+  .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml')
+  .option('-i, --interactive', 'Run on interactive mode')
+  .parse(process.argv);
 
-const oprah = makeOprah({ params });
-oprah.run();
+if (!program.stage) {
+  logError('Invalid options!! You must specify stage.');
+  program.help();
+}
+
+const params = {
+  stage: program.stage,
+  interactive: program.interactive,
+  config: program.config
+};
+
+try {
+  makeOprah({ params }).run();
+} catch(error) {
+  logError(error.message);
+}
