@@ -38,8 +38,4 @@ const params = {
   variables: Object.assign({}, variables, { stage: program.stage })
 };
 
-try {
-  makeOprah({ params }).run();
-} catch(error) {
-  logError(error.message);
-}
+makeOprah({ params }).run().catch(error => logError(error.message));
