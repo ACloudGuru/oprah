@@ -23,7 +23,7 @@ const runServerless = ({ serverlessYamlDirectory, stage }) => {
     return Bluebird.reject(new Error(`Could not find serverless.yml for runServerless`))
   }
 
-  const childProcess = execa('serverless', ['deploy', '--stage', stage], { cwd: serverlessYamlDirectory });
+  const childProcess = execa('serverless', ['deploy', '--stage', stage, '--force'], { cwd: serverlessYamlDirectory });
 
   childProcess.stdout.pipe(process.stdout);
 
