@@ -16,7 +16,9 @@ function upload(params) {
     () => console.log(chalk.grey(`Updating config: Name: ${params.Name} | Value: [${params.Value}]`));
 
   log();
-  return ssm.putParameter(params).promise();
+  return ssm.putParameter(params)
+    .promise()
+    .then(result => params);
 }
 
 function generateConfigUpdaters({ ssmPath, config }) {
