@@ -18,6 +18,6 @@ describe('populateConfig', () => {
   })
 
   it('should populate config', () => {
-    expect(result).toEqual([]);
+    expect(result).toEqual({});
   });
 });
