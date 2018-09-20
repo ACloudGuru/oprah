@@ -16,9 +16,7 @@ function upload(params) {
     () => console.log(chalk.grey(`Updating config: Name: ${params.Name} | Value: [${params.Value}]`));
 
   log();
-  return ssm.putParameter(params)
-    .promise()
-    .then(result => params);
+  return ssm.putParameter(params).promise();
 }
 
 function generateConfigUpdaters({ ssmPath, config }) {
@@ -32,8 +30,8 @@ function generateConfigUpdaters({ ssmPath, config }) {
         Overwrite: true
       };
 
-      return () => upload(params);
-    });
+      return () => upload(params).then(result => ({ [key]: value }));
+    })
 }
 
 function generateSecretUpdaters({ ssmPath, secrets, keyId }) {
@@ -48,7 +46,7 @@ function generateSecretUpdaters({ ssmPath, secrets, keyId }) {
         KeyId: keyId || 'alias/aws/ssm'
       };
 
-      return () => upload(params);
+      return () => upload(params).then(result => ({ [key]: value }));
     });
 }
 

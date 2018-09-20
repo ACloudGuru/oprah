@@ -40,7 +40,14 @@ const populateConfig = ({ defaultPath, requiredPath, overridePath, ssmPath, noni
       ssmPath
     });
 
-    return Bluebird.mapSeries(updaters, updater => updater().delay(500));
+    return Bluebird.mapSeries(updaters, updater => updater().delay(500)).then(vars => {
+      return vars.reduce((acc, entry) => {
+        return Object.assign({},
+          acc,
+          entry
+          )
+      }, {});
+    });
   });
 };
 

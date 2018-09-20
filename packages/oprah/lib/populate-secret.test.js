@@ -56,8 +56,10 @@ describe('#populateSecret', () => {
 
       return populateSecret({ requiredPath, ssmPath,  keyId, noninteractive})
         .then(response => {
-          expect(response.length).toEqual(2);
-          expect(response).toEqual([true, true]);
+          expect(response).toEqual({
+            REQUIRED_SECRET: '123',
+            ANOTHER_REQUIRED_SECRET: '234'
+          });
           expect(mockPut).toHaveBeenCalledTimes(2);
 
           expect(mockPut.mock.calls[0][0]).toEqual({
