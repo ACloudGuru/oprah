@@ -1,10 +1,11 @@
 {
-  "name": "@a-cloud-guru/oprah",
-  "version": "2.2.0",
-  "description": "",
+  "name": "oprah",
+  "version": "1.0.0",
+  "description": "Package to deploy parameters to AWS",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "lint": "yarn eslint .",
+    "test": "yarn jest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -31,13 +32,21 @@
   },
   "devDependencies": {
     "commander": "^2.17.1",
+    "coveralls": "^3.0.2",
     "eslint": "^5.9.0",
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
-    "jest": "^23.2.0",
-    "serverless": "^1.27.3"
+    "jest": "^23.2.0"
   },
-  "peerDependencies": {
-    "serverless": "^1.27.3"
+  "peerDependencies": {},
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "statements": 95,
+        "branches": 95,
+        "lines": 95,
+        "functions": 95
+      }
+    }
   }
 }
