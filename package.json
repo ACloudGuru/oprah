@@ -40,7 +40,8 @@
     "lodash.property": "^4.4.2",
     "lodash.template": "^4.4.0",
     "lodash.topairs": "^4.3.0",
-    "prompt": "^1.0.0"
+    "prompt": "^1.0.0",
+    "root-path": "^0.2.1"
   },
   "devDependencies": {
     "commander": "^2.17.1",
