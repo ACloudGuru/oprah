@@ -1,13 +1,10 @@
 service: oprah-service
 provider: ssm
+
 cfOutputs:
   - acloudguru-custom-resources-${stage}
   - test
-# serverless:
-#   configDir: ./examples
-#   outputs:
-#     LAMBDA_EXECUTION_ROLE: lambdaRole
-#     KEY_ALIAS: keyAlias
+
 config:
   path: /${stage}/oprah/config
   defaults:
@@ -15,6 +12,7 @@ config:
     DB_HOST: 3200
   required:
     DB_TABLE: "some database table name for ${stage}"
+
 secret:
   keyId: arn:aws:kms:us-east-1:574504572869:key/65def1bd-e786-4334-a17f-4cc0af72fed3
   path: /${stage}/oprah/secret
