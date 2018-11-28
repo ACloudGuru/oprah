@@ -12,6 +12,7 @@ program
   .option('-s, --stage [stage]', 'Specify stage to run on. (required)')
   .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml')
   .option('-v, --variables [variables]', 'Variables used for config interpolation.')
+  .option('-l, --list', 'List all remote configurations')
   .option('-i, --interactive', 'Run on interactive mode')
   .parse(process.argv);
 
@@ -33,6 +34,7 @@ try {
 
 const params = {
   stage: program.stage,
+  list: program.list,
   interactive: program.interactive,
   config: program.config || 'oprah.yml',
   variables: Object.assign({}, variables, { stage: program.stage })
