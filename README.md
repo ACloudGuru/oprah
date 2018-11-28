@@ -1,48 +1,95 @@
-# Oprah
+# 🐝 Oprah
 
-## Dependencies
+Node module to push configuration and encrypted secrets to AWS.
 
-- node 6.10.3
+## Installation
+
+```
+# Via yarn
+$ yarn add oprah
+
+# Via npm
+$ npm install oprah
+```
 
 ## Usage
 
-### Config
-
-Config specified in `config/default.yaml` will be applied to all environments unless an override file is specified.
-
-If an override file is specified in `config/[stage].yaml`, the override file will be merged with the default config values.
-
-### Secrets
-
-Required secrets can be specified in `secret/required.yaml`. Every key specified in this file will prompt the user for a value when `configure.sh` is run.
+1. At the root of your application add configuration file called `oprah.yml`.
 
 ```
-populateConfig({
-  defaultPath,
-  overridePath,
-  ssmPath,
-  variables = {}
-})
+service: oprah-service
+provider: ssm
+
+config:
+  path: /${stage}/oprah/config
+  defaults:
+    DB_NAME: my-database
+    DB_HOST: 3200
+  required:
+    DB_TABLE: "some database table name for ${stage}"
+
+secret:
+  path: /${stage}/oprah/secret
+  required:
+    DB_PASSWORD: "secret database password"
 ```
 
-```
-populateSecret({
-  requiredPath,
-  ssmPath,
-  keyId,
-  noninteractive
-})
-```
+2. Use `oprah` CLI tool to push your keys to AWS parameter store.
 
 ```
-readCfOutputs({
-  stackName
-})
+$ oprah stage <stage> --interactive
 ```
 
+### Config File
+
+Following is the configuration file will all possible options:
+
+
 ```
-runServerless({
-  serverlessYamlDirectory,
-  stage
-})
+service: oprah-service
+provider: ssm                                 # Only supports ssm for now.
+
+cfOutputs:                                    # Outputs from cloudformation stacks that needs to be pushed to ssm.
+  - some-cloudformation-stack
+
+config:
+  path: /${stage}/oprah/config                # Base path for params to be added to
+  defaults:                                   # Default parameters. Can be overwritten in different environments.
+    DB_NAME: my-database
+    DB_HOST: 3200
+  production:                                 # If keys are deployed to production stage, its value will be overwritten by following
+    DB_NAME: my-production-database
+  required:                                   # Keys mentioned below will be prompted to be entered.
+    DB_TABLE: "some database table name for ${stage}"
+
+secret:
+  keyId: some-arn-of-kms-key-to-use .         # If not specified, default key will be used to encrypt variables.
+  path: /${stage}/oprah/secret                # Base path for params to be added to
+  required:
+    DB_PASSWORD: "secret database password" . # Parameter to encrypt and add to. Will be encrypted using KMS.
+                                              # Above key will be added to /${stage}/oprah/secret/DB_PASSWORD
+                                              # Value in quote will be displayed as explanation in prompt during interactive run.
 ```
+
+### CLI
+
+Following is the usage of `oprah` CLI.
+
+```
+  Usage: oprah [options]
+
+  Options:
+
+    -V, --version                output the version number
+    -s, --stage [stage]          Specify stage to run on. (required)
+    -c, --config [config]        Path to oprah configuration (default: oprah.yml)
+    -v, --variables [variables]  Variables used for config interpolation.
+    -l, --list                   List all remote configurations
+    -i, --interactive            Run on interactive mode
+    -h, --help                   output usage information
+
+```
+
+### License
+
+Feel free to use the code, it's released using the MIT license.
