@@ -1,4 +1,8 @@
 [![Build Status][travis-image]][travis-url]
+[![Codacy Badge][codacy-image]][codacy-url]
+[![NPM Status][npm-image]][npm-url]
+[![GitHub license][license-image]][license-url]
+[![dependencies Status][dependencies-image]][dependencies-url]
 
 # 🐝 Oprah
 
@@ -98,3 +102,11 @@ Feel free to use the code, it's released using the MIT license.
 
 [travis-image]: https://travis-ci.org/ACloudGuru/oprah.svg?branch=master
 [travis-url]: https://travis-ci.org/ACloudGuru/oprah
+[dependencies-image]:https://david-dm.org/ACloudGuru/oprah/status.svg
+[dependencies-url]:https://david-dm.org/ACloudGuru/oprah
+[npm-image]:https://img.shields.io/npm/v/oprah.svg
+[npm-url]:https://www.npmjs.com/package/oprah
+[codacy-image]:https://api.codacy.com/project/badge/Grade/6464d14b26214357ba838d2cdbdfcb8e
+[codacy-url]:https://www.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ACloudGuru/oprah&amp;utm_campaign=Badge_Grade
+[license-image]:https://img.shields.io/github/license/ACloudGuru/oprah.svg
+[license-url]:https://github.com/ACloudGuru/oprah/blob/master/LICENSE
