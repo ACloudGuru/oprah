@@ -1,3 +1,5 @@
+[![Build Status][travis-image]][travis-url]
+
 # 🐝 Oprah
 
 Node module to push configuration and encrypted secrets to AWS.
@@ -93,3 +95,6 @@ Following is the usage of `oprah` CLI.
 ### License
 
 Feel free to use the code, it's released using the MIT license.
+
+[travis-image]: https://travis-ci.org/ACloudGuru/oprah.svg?branch=master
+[travis-url]: https://travis-ci.org/ACloudGuru/oprah
