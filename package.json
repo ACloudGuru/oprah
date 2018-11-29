@@ -31,7 +31,7 @@
     "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
     "deep-map": "^1.5.0",
-    "execa": "^0.10.0",
+    "execa": "^1.0.0",
     "js-yaml": "^3.12.0",
     "lodash.get": "^4.4.2",
     "lodash.isempty": "^4.4.0",
