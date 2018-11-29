@@ -2,6 +2,8 @@
 
 # 🐝 Oprah
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6c866fdffcfe424685e2fad21f114bf6)](https://app.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&utm_medium=referral&utm_content=ACloudGuru/oprah&utm_campaign=Badge_Grade_Dashboard)
+
 Node module to push configuration and encrypted secrets to AWS.
 
 ## Installation
