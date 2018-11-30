@@ -3,6 +3,7 @@
 [![NPM Status][npm-image]][npm-url]
 [![GitHub license][license-image]][license-url]
 [![dependencies Status][dependencies-image]][dependencies-url]
+[![LGTM Status][lgtm-image]][lgtm-url]
 
 # 🐝 Oprah
 
@@ -110,3 +111,6 @@ Feel free to use the code, it's released using the MIT license.
 [codacy-url]:https://www.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ACloudGuru/oprah&amp;utm_campaign=Badge_Grade
 [license-image]:https://img.shields.io/github/license/ACloudGuru/oprah.svg
 [license-url]:https://github.com/ACloudGuru/oprah/blob/master/LICENSE
+[lgtm-image]:https://img.shields.io/lgtm/grade/javascript/g/ACloudGuru/oprah.svg?logo=lgtm&logoWidth=18
+[lgtm-url]:https://lgtm.com/projects/g/ACloudGuru/oprah/context:javascript
+
