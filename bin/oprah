@@ -5,6 +5,7 @@
 const chalk = require('chalk');
 const pjson = require('../package.json');
 const program = require('commander');
+const path = require('path');
 const { makeOprah } = require('../lib/makeOprah');
 const { logError, log } = require('../lib/utils/logger');
 
@@ -33,11 +34,13 @@ try {
   program.help();
 }
 
+const defaultConfig = path.resolve(process.cwd(), 'oprah.yml');
+
 const params = {
   stage: program.stage,
   list: program.list,
   interactive: program.interactive,
-  config: program.config || 'oprah.yml',
+  config: program.config ? path.resolve(program.config) : defaultConfig,
   variables: Object.assign({}, variables, { stage: program.stage })
 };
 
