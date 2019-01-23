@@ -35,6 +35,8 @@
     "deep-map": "^1.5.0",
     "execa": "^1.0.0",
     "js-yaml": "^3.12.0",
+    "lodash.chunk": "^4.2.0",
+    "lodash.flatten": "^4.4.0",
     "lodash.get": "^4.4.2",
     "lodash.isempty": "^4.4.0",
     "lodash.map": "^4.6.0",
