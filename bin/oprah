@@ -38,13 +38,21 @@ const defaultConfig = path.resolve(process.cwd(), 'oprah.yml');
 
 const params = {
   stage: program.stage,
-  list: program.list,
   interactive: program.interactive,
   config: program.config ? path.resolve(program.config) : defaultConfig,
   variables: Object.assign({}, variables, { stage: program.stage })
 };
 
-makeOprah({ params })
-  .run()
+const oprah = makeOprah({ params });
+
+let oprahPromise = null;
+
+if (program.list) {
+  oprahPromise = oprah.list();
+} else {
+  oprahPromise = oprah.run();
+}
+
+oprahPromise
   .tap(() => log(chalk.green('Done.')))
   .catch(error => logError(error.message));
