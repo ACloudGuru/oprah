@@ -29,6 +29,7 @@
   "dependencies": {
     "aws-sdk": "^2.263.1",
     "bluebird": "^3.5.1",
+    "cfn": "^1.8.1",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
     "deep-map": "^1.5.0",
