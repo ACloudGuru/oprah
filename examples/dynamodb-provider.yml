@@ -1,0 +1,23 @@
+service: oprah-service
+provider:
+  name: ddb
+  tableName: oprah-test-table-name
+
+cfOutputs:
+  - acloudguru-custom-resources-${stage}
+  - test
+
+config:
+  path: /${stage}/oprah/config
+  defaults:
+    DB_NAME: my-database
+    DB_HOST: 3200
+  required:
+    DB_TABLE: "some database table name for ${stage}"
+
+secret:
+  keyId: arn:aws:kms:us-east-1:574504572869:key/65def1bd-e786-4334-a17f-4cc0af72fed3
+  path: /${stage}/oprah/secret
+  required:
+    DB_PASSWORD: "secret database password"
+

@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: "Oprah Dynamodb Parameter Store "
+Parameters:
+  TableName:
+    Type: String
+    Description: The parameter store table name
+
+Resources:
+  ParameterStore:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName:
+        Ref: TableName
+      BillingMode: PAY_PER_REQUEST
+      SSESpecification:
+        SSEEnabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      AttributeDefinitions:
+        -
+          AttributeName: "name"
+          AttributeType: "S"
+        -
+          AttributeName: "version"
+          AttributeType: "S"
+      KeySchema:
+        -
+          AttributeName: "name"
+          KeyType: "HASH"
+        -
+          AttributeName: "version"
+          KeyType: "RANGE"
+
+Outputs:
+  TableName:
+    Value:
+      Ref: ParameterStore
+    Description: "Table name of the parameter store"

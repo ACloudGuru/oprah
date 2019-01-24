@@ -8,40 +8,86 @@ const program = require('commander');
 const { makeOprah } = require('../lib/makeOprah');
 const { logError, log } = require('../lib/utils/logger');
 
+let oprahPromise = null;
+
 program
   .version(pjson.version)
   .option('-s, --stage [stage]', 'Specify stage to run on. (required)')
-  .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml')
+  .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml');
+
+program
+  .command('run')
+  .description('Initialize oprah. Only required to run once.')
   .option('-v, --variables [variables]', 'Variables used for config interpolation.')
-  .option('-l, --list', 'List all remote configurations')
   .option('-i, --interactive', 'Run on interactive mode')
-  .parse(process.argv);
+  .action(({ interactive, variables }) => {
+    let parsedVariables = {};
+
+    try {
+      if (variables) {
+        parsedVariables = JSON.parse(variables);
+      }
+    } catch(error) {
+      logError(`Variables must be in JSON format!! ${error.message}.`);
+      program.help();
+    }
+
+    const params = {
+      stage: program.stage,
+      interactive,
+      config: program.config,
+      variables: parsedVariables
+    };
+
+    oprahPromise = makeOprah(params).run();
+  });
+
+program
+  .command('init')
+  .description('Initialize oprah. Only required to run once.')
+  .action(() => {
+    const params = {
+      stage: program.stage,
+      config: program.config,
+    };
+
+    oprahPromise = makeOprah(params).init();
+  });
+
+program
+  .command('list')
+  .description('List all remote configurations and secrets.')
+  .action(() => {
+    const params = {
+      stage: program.stage,
+      config: program.config
+    };
+
+    oprahPromise = makeOprah(params).list();
+  });
+
+program.on('command:*', () => {
+  logError(`Invalid command - ${program.args.join()}`);
+  program.help();
+  process.exit(1);
+});
+
+program.parse(process.argv);
+
+if (!process.argv.slice(2).length) {
+  program.help();
+}
 
 if (!program.stage) {
   logError('Invalid options!! You must specify stage.');
   program.help();
 }
 
-let variables = {};
-
-try {
-  if (program.variables) {
-    variables = JSON.parse(program.variables);
-  }
-} catch(error) {
-  logError(`Variables must be in JSON format!! ${error.message}.`);
+if (!oprahPromise) {
+  logError('Invalid command!! At least one command must be executed.');
   program.help();
 }
 
-const params = {
-  stage: program.stage,
-  list: program.list,
-  interactive: program.interactive,
-  config: program.config || 'oprah.yml',
-  variables: Object.assign({}, variables, { stage: program.stage })
-};
-
-makeOprah({ params })
-  .run()
+oprahPromise
   .tap(() => log(chalk.green('Done.')))
-  .catch(error => logError(error.message));
+  .catch(logError);
