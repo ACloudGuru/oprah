@@ -1,7 +1,7 @@
-service: oprah-service
+service: bff-service
 provider:
   name: ddb
-  tableName: oprah-test-table-name
+  tableName: oprah-bff-service-${stage}
 
 cfOutputs:
   - acloudguru-custom-resources-${stage}
