@@ -5,13 +5,10 @@
 const chalk = require('chalk');
 const pjson = require('../package.json');
 const program = require('commander');
-const path = require('path');
 const { makeOprah } = require('../lib/makeOprah');
 const { logError, log } = require('../lib/utils/logger');
 
 let oprahPromise = null;
-
-const defaultConfig = path.resolve(process.cwd(), 'oprah.yml');
 
 program
   .version(pjson.version)
@@ -38,11 +35,11 @@ program
     const params = {
       stage: program.stage,
       interactive,
-      config: program.config ? path.resolve(program.config) : defaultConfig,
-      variables: Object.assign({}, parsedVariables, { stage: program.stage })
+      config: program.config,
+      variables: parsedVariables
     };
 
-    oprahPromise = makeOprah({ params }).run();
+    oprahPromise = makeOprah(params).run();
   });
 
 program
@@ -51,12 +48,10 @@ program
   .action(() => {
     const params = {
       stage: program.stage,
-      interactive: false,
-      config: program.config ? path.resolve(program.config) : defaultConfig,
-      variables: { stage: program.stage }
+      config: program.config,
     };
 
-    oprahPromise = makeOprah({ params }).init();
+    oprahPromise = makeOprah(params).init();
   });
 
 program
@@ -65,16 +60,14 @@ program
   .action(() => {
     const params = {
       stage: program.stage,
-      interactive: false,
-      config: program.config ? path.resolve(program.config) : defaultConfig,
-      variables: { stage: program.stage }
+      config: program.config
     };
 
-    oprahPromise = makeOprah({ params }).list();
+    oprahPromise = makeOprah(params).list();
   });
 
 program.on('command:*', () => {
-  logError(`Invalid option - ${program.args.join()}`);
+  logError(`Invalid command - ${program.args.join()}`);
   program.help();
   process.exit(1);
 });
@@ -90,6 +83,11 @@ if (!program.stage) {
   program.help();
 }
 
+if (!oprahPromise) {
+  logError('Invalid command!! At least one command must be executed.');
+  program.help();
+}
+
 oprahPromise
   .tap(() => log(chalk.green('Done.')))
-  .catch(error => console.log(error));
+  .catch(logError);
