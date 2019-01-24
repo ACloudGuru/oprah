@@ -1,3 +1,4 @@
+const Bluebird = require('bluebird');
 const _AWS = require('aws-sdk');
 
 const DynamoDB = jest.fn(function () {});
@@ -14,6 +15,13 @@ const MarketplaceEntitlementService = jest.fn(function () {});
 const MarketplaceMetering = jest.fn(function () {});
 const SQS = jest.fn(function () {});
 const S3 = jest.fn(function () {});
+const CloudFormation = jest.fn(function () {
+  return ({
+    describeStacks: jest.fn(() => ({
+      promise: () => Bluebird.resolve()
+    }))
+  })
+});
 
 const AWS = {
   DynamoDB,
@@ -26,7 +34,12 @@ const AWS = {
   S3,
   Firehose,
   MarketplaceEntitlementService,
-  MarketplaceMetering
+  MarketplaceMetering,
+  CloudFormation,
+  config: {
+    setPromisesDependency: () => {},
+    update: () => {}
+  }
 };
 
 module.exports = AWS;
