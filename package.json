@@ -1,6 +1,6 @@
 {
   "name": "oprah",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Package to deploy parameters to AWS",
   "repository": "https://github.com/ACloudGuru/oprah.git",
   "author": "subash adhikari <subash.adhikari@acloud.guru>",
