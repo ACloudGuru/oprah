@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [v2.1.0](TBD)
 
 ### Changed
-- Mask secrets on parameters are listed
+- Mask secrets when parameters are listed
 
 ### Fixed
-- Reduce RCU when listing parameters
+- Reduce RCU when listing parameters (DynamoDB provider)
 
 ## [v2.0.0](2019-01-24)
 
