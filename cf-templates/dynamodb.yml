@@ -8,6 +8,7 @@ Parameters:
 Resources:
   ParameterStore:
     Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
     Properties:
       TableName:
         Ref: TableName

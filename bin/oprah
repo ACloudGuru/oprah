@@ -17,7 +17,7 @@ program
 
 program
   .command('run')
-  .description('Initialize oprah. Only required to run once.')
+  .description('Verify or populate all remote configurations and secrets.')
   .option('-v, --variables [variables]', 'Variables used for config interpolation.')
   .option('-i, --interactive', 'Run on interactive mode')
   .action(({ interactive, variables }) => {
