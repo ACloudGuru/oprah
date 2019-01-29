@@ -1,5 +1,7 @@
-service: oprah-service
-provider: ssm
+service: my-service
+provider:
+  name: ddb
+  tableName: oprah-my-service-${stage}
 
 cfOutputs:
   - acloudguru-custom-resources-${stage}
