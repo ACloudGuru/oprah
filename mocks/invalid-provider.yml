@@ -1,10 +1,8 @@
-service: my-service
+service: bff-service
 provider:
-  name: ddb
-  tableName: oprah-my-service-${stage}
+  name: s3
 
 cfOutputs:
-  - acloudguru-custom-resources-${stage}
   - test
 
 config:
