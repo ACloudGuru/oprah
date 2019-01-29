@@ -9,9 +9,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Mask secrets when parameters are listed
 
-### Fixed
-- Reduce RCU when listing parameters (DynamoDB provider)
-
 ## [v2.0.0](2019-01-24)
 
 ### Added
