@@ -94,4 +94,7 @@ if (!oprahPromise) {
 
 oprahPromise
   .tap(() => log(chalk.green('Done.')))
-  .catch(logError);
+  .catch(err => {
+    logError(err)
+    process.exit(1);
+  });
