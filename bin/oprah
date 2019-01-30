@@ -66,26 +66,30 @@ program
     oprahPromise = makeOprah(params).list();
   });
 
-program.on('command:*', () => {
-  logError(`Invalid command - ${program.args.join()}`);
+function displayHelpAndExit() {
   program.help();
   process.exit(1);
+}
+
+program.on('command:*', () => {
+  logError(`Invalid command - ${program.args.join()}`);
+  displayHelpAndExit();
 });
 
 program.parse(process.argv);
 
 if (!process.argv.slice(2).length) {
-  program.help();
+  displayHelpAndExit();
 }
 
 if (!program.stage) {
   logError('Invalid options!! You must specify stage.');
-  program.help();
+  displayHelpAndExit();
 }
 
 if (!oprahPromise) {
   logError('Invalid command!! At least one command must be executed.');
-  program.help();
+  displayHelpAndExit();
 }
 
 oprahPromise
