@@ -44,7 +44,7 @@ secret:
 2. Use `oprah` CLI tool to push your keys to AWS parameter store.
 
 ```
-$ oprah stage <stage> --interactive
+$ oprah run --stage <stage> --interactive 
 ```
 
 ### Config File
