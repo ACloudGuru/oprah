@@ -83,17 +83,18 @@ secret:
 Following is the usage of `oprah` CLI.
 
 ```
-  Usage: oprah [options]
+Usage: oprah [options] [command]
 
-  Options:
+Options:
+  -V, --version          output the version number
+  -s, --stage [stage]    Specify stage to run on. (required)
+  -c, --config [config]  Path to oprah configuration (default: "oprah.yml")
+  -h, --help             output usage information
 
-    -V, --version                output the version number
-    -s, --stage [stage]          Specify stage to run on. (required)
-    -c, --config [config]        Path to oprah configuration (default: oprah.yml)
-    -v, --variables [variables]  Variables used for config interpolation.
-    -l, --list                   List all remote configurations
-    -i, --interactive            Run on interactive mode
-    -h, --help                   output usage information
+Commands:
+  run [options]          Verify or populate all remote configurations and secrets.
+  init                   Initialize oprah. Only required to run once.
+  list                   List all remote configurations and secrets.
 
 ```
 
