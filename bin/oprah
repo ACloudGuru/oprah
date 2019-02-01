@@ -39,9 +39,7 @@ program
       variables: parsedVariables
     };
 
-    const oprah = makeOprah(params);
-
-    oprahPromise = oprah.init().then(oprah.run);
+    oprahPromise = makeOprah(params).run();
   });
 
 program
