@@ -5,6 +5,7 @@
 const chalk = require('chalk');
 const pjson = require('../package.json');
 const program = require('commander');
+const Bluebird = require('bluebird');
 const { makeOprah } = require('../lib/make-oprah');
 const { logError, log } = require('../lib/utils/logger');
 
@@ -55,12 +56,40 @@ program
   });
 
 program
+  .command('export')
+  .description('Export of all of the configuration from the provider to a text json file')
+  .option('-p, --path [path]', 'The location for the output secrets & configuration file (default: "/tmp/oprah-exports.json")')
+  .action(({ path }) => {
+    const params = {
+      stage: program.stage,
+      config: program.config,
+    };
+
+    oprahPromise = makeOprah(params)
+      .export(path || '/tmp/oprah-exports.json');
+  });
+
+program
+  .command('import')
+  .description('Import all of the configuration from the json from to a provider')
+  .option('-p, --path [path]', 'The location of the secrets and configuration file (default: "/tmp/oprah-exports.json")')
+  .action(({ path }) => {
+    const params = {
+      stage: program.stage,
+      config: program.config,
+    };
+
+    oprahPromise = makeOprah(params)
+      .import(path || '/tmp/oprah-exports.json');
+  });
+
+program
   .command('list')
   .description('List all remote configurations and secrets.')
   .action(() => {
     const params = {
       stage: program.stage,
-      config: program.config
+      config: program.config,
     };
 
     oprahPromise = makeOprah(params).list();
