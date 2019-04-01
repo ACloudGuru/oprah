@@ -10,7 +10,16 @@ const Lambda = jest.fn(function () {});
 const SSM = jest.fn(function () {});
 const SNS = jest.fn(function () {});
 const Firehose = jest.fn(function () {});
-const STS = jest.fn(function () {});
+const STS = jest.fn(function () {
+  return {
+    getCallerIdentity: () => ({
+      promise: () => Bluebird.resolve({
+        Account: '1234'
+      })
+    })
+  }
+});
+
 const MarketplaceEntitlementService = jest.fn(function () {});
 const MarketplaceMetering = jest.fn(function () {});
 const SQS = jest.fn(function () {});
