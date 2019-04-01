@@ -16,7 +16,7 @@ config:
     DB_TABLE: "some database table name for ${stage}"
 
 secret:
-  keyId: arn:aws:kms:us-east-1:574504572869:key/65def1bd-e786-4334-a17f-4cc0af72fed3
+  keyId: arn:aws:kms:us-east-1:${accountId}:key/65def1bd-e786-4334-a17f-4cc0af72fed3
   path: /${stage}/oprah/secret
   required:
     DB_PASSWORD: "secret database password"
