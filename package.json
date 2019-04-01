@@ -46,6 +46,7 @@
     "lodash.padstart": "^4.6.1",
     "lodash.template": "^4.4.0",
     "lodash.topairs": "^4.3.0",
+    "lodash.values": "^4.3.0",
     "prompt": "^1.0.0",
     "root-path": "^0.2.1"
   },
