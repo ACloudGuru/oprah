@@ -5,7 +5,6 @@
 const chalk = require('chalk');
 const pjson = require('../package.json');
 const program = require('commander');
-const Bluebird = require('bluebird');
 const { makeOprah } = require('../lib/make-oprah');
 const { logError, log } = require('../lib/utils/logger');
 
@@ -93,6 +92,19 @@ program
     };
 
     oprahPromise = makeOprah(params).list();
+  });
+
+program
+  .command('fetch')
+  .description('Fetch config or secret')
+  .option('-k, --key [key]', 'The config/secret key (example: "/test/email/config/SOME_VALUE")')
+  .action(({ key }) => {
+    const params = {
+      stage: program.stage,
+      config: program.config,
+    };
+
+    oprahPromise = makeOprah(params).fetch({ key });
   });
 
 function displayHelpAndExit() {
