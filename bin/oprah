@@ -20,7 +20,8 @@ program
   .description('Verify or populate all remote configurations and secrets.')
   .option('-v, --variables [variables]', 'Variables used for config interpolation.')
   .option('-i, --interactive', 'Run on interactive mode')
-  .action(({ interactive, variables }) => {
+  .option('-m, --missing', 'Only prompt missing values in interactive mode')
+  .action(({ interactive, variables, missing }) => {
     let parsedVariables = {};
 
     try {
@@ -35,6 +36,7 @@ program
     const params = {
       stage: program.stage,
       interactive,
+      missingOnly: missing,
       config: program.config,
       variables: parsedVariables
     };
