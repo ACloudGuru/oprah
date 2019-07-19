@@ -1,7 +1,8 @@
 {
     "plugins": [
         "node",
-        "promise"
+        "promise",
+        "prettier"
     ],
     "extends": [
         "eslint:recommended",
