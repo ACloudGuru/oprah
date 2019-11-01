@@ -1,9 +1,12 @@
 {
   "name": "oprah",
-  "version": "2.8.1",
+  "version": "3.0.0",
   "description": "Package to deploy parameters to AWS",
   "repository": "https://github.com/ACloudGuru/oprah.git",
   "author": "subash adhikari <subash.adhikari@acloud.guru>",
+  "engines": {
+    "node": ">=8.10.0"
+  },
   "contributors": [
     "Silla Tan <silla.tan@acloud.guru>"
   ],
@@ -32,6 +35,7 @@
     "cfn": "^1.8.1",
     "chalk": "^2.4.1",
     "commander": "^2.19.0",
+    "dataloader": "^1.4.0",
     "decimal.js-light": "^2.5.0",
     "deep-map": "^1.5.0",
     "execa": "^1.0.0",
@@ -45,15 +49,14 @@
     "lodash.mapvalues": "^4.6.0",
     "lodash.padstart": "^4.6.1",
     "lodash.template": "^4.4.0",
-    "lodash.topairs": "^4.3.0",
     "lodash.values": "^4.3.0",
     "prompt": "^1.0.0",
     "root-path": "^0.2.1"
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
-    "eslint": "^4.7.1",
-    "eslint-plugin-node": "^4.0.0",
+    "eslint": "^6.6.0",
+    "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-promise": "^3.4.1",
     "jest": "^23.2.0",

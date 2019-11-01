@@ -1,8 +1,7 @@
 language: node_js
 
 node_js:
-  - '6.10'
-  - '8'
+  - '8.10'
 
 install:
   - yarn install
@@ -23,4 +22,4 @@ deploy:
     tags: true
     repo: ACloudGuru/oprah
     branch: master
-    node: '6.10'
+    node: '8.10'
