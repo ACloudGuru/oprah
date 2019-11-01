@@ -4,6 +4,9 @@
   "description": "Package to deploy parameters to AWS",
   "repository": "https://github.com/ACloudGuru/oprah.git",
   "author": "subash adhikari <subash.adhikari@acloud.guru>",
+  "engines": {
+    "node": ">=8.10.0"
+  },
   "contributors": [
     "Silla Tan <silla.tan@acloud.guru>"
   ],
@@ -53,8 +56,8 @@
   },
   "devDependencies": {
     "coveralls": "^3.0.2",
-    "eslint": "^4.7.1",
-    "eslint-plugin-node": "^4.0.0",
+    "eslint": "^6.6.0",
+    "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-promise": "^3.4.1",
     "jest": "^23.2.0",

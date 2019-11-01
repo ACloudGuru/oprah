@@ -24,12 +24,6 @@
         "no-unused-vars": [2, { "argsIgnorePattern": "^_" }],
         "no-console": 0,
         "no-process-exit": 0,
-        "node/no-unsupported-features": [
-            2,
-            {
-                "version": 6
-            }
-        ],
         "promise/param-names": 2,
         "promise/catch-or-return": 2,
         "promise/no-native": 0,
