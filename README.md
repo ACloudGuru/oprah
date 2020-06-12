@@ -1,9 +1,10 @@
 [![Build Status][travis-image]][travis-url]
+[![codecov](https://codecov.io/gh/ACloudGuru/oprah/branch/master/graph/badge.svg)](https://codecov.io/gh/ACloudGuru/oprah)
 [![Codacy Badge][codacy-image]][codacy-url]
 [![NPM Status][npm-image]][npm-url]
 [![GitHub license][license-image]][license-url]
 [![dependencies Status][dependencies-image]][dependencies-url]
-[![LGTM Status][lgtm-image]][lgtm-url]
+
 
 # 🐝 Oprah
 
