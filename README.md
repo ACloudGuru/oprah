@@ -2,7 +2,6 @@
 [![codecov](https://codecov.io/gh/ACloudGuru/oprah/branch/master/graph/badge.svg)](https://codecov.io/gh/ACloudGuru/oprah)
 [![Codacy Badge][codacy-image]][codacy-url]
 [![NPM Status][npm-image]][npm-url]
-[![GitHub license][license-image]][license-url]
 [![dependencies Status][dependencies-image]][dependencies-url]
 
 
@@ -111,8 +110,4 @@ Feel free to use the code, it's released using the MIT license.
 [npm-url]:https://www.npmjs.com/package/oprah
 [codacy-image]:https://api.codacy.com/project/badge/Grade/6464d14b26214357ba838d2cdbdfcb8e
 [codacy-url]:https://www.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ACloudGuru/oprah&amp;utm_campaign=Badge_Grade
-[license-image]:https://img.shields.io/github/license/ACloudGuru/oprah.svg
-[license-url]:https://github.com/ACloudGuru/oprah/blob/master/LICENSE
-[lgtm-image]:https://img.shields.io/lgtm/grade/javascript/g/ACloudGuru/oprah.svg?logo=lgtm&logoWidth=18
-[lgtm-url]:https://lgtm.com/projects/g/ACloudGuru/oprah/context:javascript
 
