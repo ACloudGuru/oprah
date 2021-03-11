@@ -1,0 +1,17 @@
+service: my-service
+provider:
+  name: ssm
+
+stacks:
+  - custom-resources-${stage}
+
+config:
+  path: /${stage}/config
+  defaults:
+    DB_NAME: my-database
+    DB_ARN: arn-path-${DatabaseName}
+
+secret:
+  path: /${stage}/secret
+  required:
+    DB_PASSWORD: "secret database password"
