@@ -1,10 +1,9 @@
-#!/usr/bin/env node
-
-'use strict'
+#!/usr/bin/env node --trace-warnings
 
 const chalk = require('chalk');
-const pjson = require('../package.json');
 const program = require('commander');
+
+const pjson = require('../package.json');
 const { makeOprah } = require('../lib/make-oprah');
 const { logError, log } = require('../lib/utils/logger');
 
@@ -18,7 +17,10 @@ program
 program
   .command('run')
   .description('Verify or populate all remote configurations and secrets.')
-  .option('-v, --variables [variables]', 'Variables used for config interpolation.')
+  .option(
+    '-v, --variables [variables]',
+    'Variables used for config interpolation.'
+  )
   .option('-i, --interactive', 'Run on interactive mode')
   .option('-m, --missing', 'Only prompt missing values in interactive mode')
   .action(({ interactive, variables, missing }) => {
@@ -28,16 +30,18 @@ program
       if (variables) {
         parsedVariables = JSON.parse(variables);
       }
-    } catch(error) {
+    } catch (error) {
       logError(`Variables must be in JSON format!! ${error.message}.`);
       program.help();
     }
 
+    const { stage, config } = program.opts();
+
     const params = {
-      stage: program.stage,
+      stage,
       interactive,
       missingOnly: missing,
-      config: program.config,
+      config,
       variables: parsedVariables
     };
 
@@ -48,65 +52,61 @@ program
   .command('init')
   .description('Initialize oprah. Only required to run once.')
   .action(() => {
-    const params = {
-      stage: program.stage,
-      config: program.config,
-    };
+    const { stage, config } = program.opts();
 
-    oprahPromise = makeOprah(params).init();
+    oprahPromise = makeOprah({ stage, config }).init();
   });
 
 program
   .command('export')
-  .description('Export of all of the configuration from the provider to a text json file')
-  .option('-p, --path [path]', 'The location for the output secrets & configuration file (default: "/tmp/oprah-exports.json")')
+  .description(
+    'Export of all of the configuration from the provider to a text json file'
+  )
+  .option(
+    '-p, --path [path]',
+    'The location for the output secrets & configuration file (default: "/tmp/oprah-exports.json")'
+  )
   .action(({ path }) => {
-    const params = {
-      stage: program.stage,
-      config: program.config,
-    };
-
-    oprahPromise = makeOprah(params)
-      .export(path || '/tmp/oprah-exports.json');
+    const { stage, config } = program.opts();
+    oprahPromise = makeOprah({ stage, config }).export(
+      path || '/tmp/oprah-exports.json'
+    );
   });
 
 program
   .command('import')
-  .description('Import all of the configuration from the json from to a provider')
-  .option('-p, --path [path]', 'The location of the secrets and configuration file (default: "/tmp/oprah-exports.json")')
+  .description(
+    'Import all of the configuration from the json from to a provider'
+  )
+  .option(
+    '-p, --path [path]',
+    'The location of the secrets and configuration file (default: "/tmp/oprah-exports.json")'
+  )
   .action(({ path }) => {
-    const params = {
-      stage: program.stage,
-      config: program.config,
-    };
-
-    oprahPromise = makeOprah(params)
-      .import(path || '/tmp/oprah-exports.json');
+    const { stage, config } = program.opts();
+    oprahPromise = makeOprah({ stage, config }).import(
+      path || '/tmp/oprah-exports.json'
+    );
   });
 
 program
   .command('list')
   .description('List all remote configurations and secrets.')
   .action(() => {
-    const params = {
-      stage: program.stage,
-      config: program.config,
-    };
-
-    oprahPromise = makeOprah(params).list();
+    const { stage, config } = program.opts();
+    oprahPromise = makeOprah({ stage, config }).list();
   });
 
 program
   .command('fetch')
   .description('Fetch config or secret')
-  .option('-k, --key [key]', 'The config/secret key (example: "/test/email/config/SOME_VALUE")')
+  .option(
+    '-k, --keys [keys]',
+    'Comma seperated configs to fetch (example: "SOME_CONFIG,ANOTHER_CONFIG")'
+  )
   .action(({ key }) => {
-    const params = {
-      stage: program.stage,
-      config: program.config,
-    };
-
-    oprahPromise = makeOprah(params).fetch({ key });
+    const { stage, config } = program.opts();
+    oprahPromise = makeOprah({ stage, config }).fetch({ key });
   });
 
 function displayHelpAndExit() {
@@ -125,7 +125,7 @@ if (!process.argv.slice(2).length) {
   displayHelpAndExit();
 }
 
-if (!program.stage) {
+if (!program.opts().stage) {
   logError('Invalid options!! You must specify stage.');
   displayHelpAndExit();
 }
@@ -138,6 +138,6 @@ if (!oprahPromise) {
 oprahPromise
   .tap(() => log(chalk.green('Done.')))
   .catch(err => {
-    logError(err)
+    logError(err);
     process.exit(1);
   });
