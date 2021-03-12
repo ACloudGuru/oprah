@@ -3,7 +3,7 @@ provider:
   name: ddb
   tableName: my-service-${stage}
 
-cfOutputs:
+stacks:
   - custom-resources-${stage}
   - test
 

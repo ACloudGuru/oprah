@@ -2,9 +2,6 @@ service: my-service
 provider:
   name: ssm
 
-cfOutputs:
-  - custom-domain-${stage}
-
 config:
   path: /${stage}/config
   defaults:
