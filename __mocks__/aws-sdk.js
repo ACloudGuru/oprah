@@ -1,54 +1,50 @@
 const Bluebird = require('bluebird');
-const _AWS = require('aws-sdk');
 
-const DynamoDB = jest.fn(function () {});
-DynamoDB.DocumentClient = jest.fn(function () {});
-DynamoDB.Converter = _AWS.DynamoDB.Converter; // use actual implementation
-
-const KMS = jest.fn(function () {});
-const Lambda = jest.fn(function () {});
-const SSM = jest.fn(function () {});
-const SNS = jest.fn(function () {});
-const Firehose = jest.fn(function () {});
-const STS = jest.fn(function () {
-  return {
-    getCallerIdentity: () => ({
-      promise: () => Bluebird.resolve({
-        Account: '1234'
-      })
-    })
-  }
-});
-
-const MarketplaceEntitlementService = jest.fn(function () {});
-const MarketplaceMetering = jest.fn(function () {});
-const SQS = jest.fn(function () {});
-const S3 = jest.fn(function () {});
-const CloudFormation = jest.fn(function () {
-  return ({
-    describeStacks: jest.fn(() => ({
-      promise: () => Bluebird.resolve()
-    }))
+const S3 = jest.fn();
+const SecretsManager = jest.fn();
+const DynamoDB = {
+  DocumentClient: jest.fn().mockReturnValue({
+    put: jest.fn({ promise: () => Promise.resolve({}) }),
+    query: jest.fn({ promise: () => Promise.resolve({ Items: [] }) }),
+    update: jest.fn({ promise: () => Promise.resolve({}) }),
+    delete: jest.fn({ promise: () => Promise.resolve({}) }),
+    get: jest.fn({ promise: () => Promise.resolve({ Item: {} }) }),
+    options: {
+      convertEmptyValues: true
+    }
   })
-});
-
-const AWS = {
-  DynamoDB,
-  KMS,
-  Lambda,
-  SSM,
-  SNS,
-  STS,
-  SQS,
-  S3,
-  Firehose,
-  MarketplaceEntitlementService,
-  MarketplaceMetering,
-  CloudFormation,
-  config: {
-    setPromisesDependency: () => {},
-    update: () => {}
-  }
 };
 
-module.exports = AWS;
+const CloudFormation = jest.fn(() => ({
+  describeStacks: jest.fn(() => ({
+    promise: () => Bluebird.resolve()
+  }))
+}));
+const KMS = jest.fn(() => {});
+const SSM = jest.fn(() => {});
+const SNS = jest.fn(() => {});
+const STS = jest.fn(() => ({
+  getCallerIdentity: () => ({
+    promise: () =>
+      Bluebird.resolve({
+        Account: '1234'
+      })
+  })
+}));
+
+const config = {
+  setPromisesDependency: jest.fn(),
+  update: jest.fn()
+};
+
+module.exports = {
+  config,
+  CloudFormation,
+  DynamoDB,
+  SecretsManager,
+  STS,
+  KMS,
+  SNS,
+  SSM,
+  S3
+};
