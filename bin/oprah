@@ -1,4 +1,4 @@
-#!/usr/bin/env node --trace-warnings
+#!/usr/bin/env node
 
 const chalk = require('chalk');
 const program = require('commander');
@@ -138,8 +138,9 @@ if (!oprahPromise) {
 }
 
 oprahPromise
-  .tap(() => log(chalk.green('Done.')))
+  .then(() => log(chalk.green('Done.')))
   .catch(err => {
+    console.log(err);
     logError(err);
     process.exit(1);
   });

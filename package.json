@@ -34,7 +34,6 @@
   "homepage": "https://github.com/ACloudGuru/oprah",
   "dependencies": {
     "aws-sdk": "^2.862.0",
-    "bluebird": "^3.5.1",
     "cfn": "^1.8.1",
     "chalk": "^4.1.0",
     "commander": "^7.1.0",
