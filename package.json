@@ -5,7 +5,7 @@
   "repository": "https://github.com/ACloudGuru/oprah.git",
   "author": "subash adhikari <subash.adhikari@acloud.guru>",
   "engines": {
-    "node": ">=8.10.0"
+    "node": ">=12.14.0"
   },
   "contributors": [
     "Silla Tan <silla.tan@acloud.guru>"
