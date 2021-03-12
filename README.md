@@ -56,7 +56,7 @@ Following is the configuration file will all possible options:
 service: oprah-service
 provider: ssm                                 # Only supports ssm for now.
 
-cfOutputs:                                    # Outputs from cloudformation stacks that needs to be pushed to ssm.
+stacks:                                       # Outputs from cloudformation stacks that needs to be interpolated.
   - some-cloudformation-stack
 
 config:
