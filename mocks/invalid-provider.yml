@@ -2,9 +2,6 @@ service: bff-service
 provider:
   name: s3
 
-cfOutputs:
-  - test
-
 config:
   path: /${stage}/oprah/config
   defaults:

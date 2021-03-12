@@ -3,10 +3,6 @@ provider:
   name: ddb
   tableName: oprah-bff-service-${stage}
 
-cfOutputs:
-  - acloudguru-custom-resources-${stage}
-  - test
-
 config:
   path: /${stage}/oprah/config
   defaults:
