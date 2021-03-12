@@ -9,9 +9,11 @@ config:
   path: /${stage}/config
   defaults:
     DB_NAME: my-database
+    DB_DB: my-db
     # DB_ARN: arn-path-${TableName} # interpolated from custom-resources stack
 
 secret:
   path: /${stage}/secret
   required:
     DB_PASSWORD: "secret database password"
+    DB_TS: "secret database password"
