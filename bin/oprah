@@ -104,9 +104,11 @@ program
     '-k, --keys [keys]',
     'Comma seperated configs to fetch (example: "SOME_CONFIG,ANOTHER_CONFIG")'
   )
-  .action(({ key }) => {
+  .action(({ keys }) => {
     const { stage, config } = program.opts();
-    oprahPromise = makeOprah({ stage, config }).fetch({ key });
+    oprahPromise = makeOprah({ stage, config }).fetch({
+      keys: keys.split(',')
+    });
   });
 
 function displayHelpAndExit() {
