@@ -1,4 +1,4 @@
-[![Build Status][travis-image]][travis-url]
+[![Build Status][github-actions-image]][github-actions-url]
 [![codecov](https://codecov.io/gh/ACloudGuru/oprah/branch/master/graph/badge.svg)](https://codecov.io/gh/ACloudGuru/oprah)
 [![Codacy Badge][codacy-image]][codacy-url]
 [![NPM Status][npm-image]][npm-url]
@@ -44,7 +44,7 @@ secret:
 2. Use `oprah` CLI tool to push your keys to AWS parameter store.
 
 ```
-$ oprah run --stage <stage> --interactive 
+$ oprah run --stage <stage> --interactive
 ```
 
 ### Config File
@@ -80,7 +80,7 @@ secret:
 
 ### CLI
 
-Following is the usage of `oprah` CLI.
+Following is all options available in `oprah` CLI.
 
 ```
 Usage: oprah [options] [command]
@@ -89,21 +89,102 @@ Options:
   -V, --version          output the version number
   -s, --stage [stage]    Specify stage to run on. (required)
   -c, --config [config]  Path to oprah configuration (default: "oprah.yml")
-  -h, --help             output usage information
+  -h, --help             display help for command
 
 Commands:
-  run [options]          Verify or populate all remote configurations and secrets.
+  run [options]          Verify or populate all remote configurations and
+                         secrets.
   init                   Initialize oprah. Only required to run once.
+  export [options]       Export of all of the configuration from the provider
+                         to a text json file
+  import [options]       Import all of the configuration from the json from to
+                         a provider
   list                   List all remote configurations and secrets.
+  fetch [options]        Fetch config or secret
+  help [command]         display help for command
+```
 
+### Push configuration
+
+```
+Usage: oprah run [options]
+
+Verify or populate all remote configurations and secrets.
+
+Options:
+  -v, --variables [variables]  Variables used for config interpolation.
+  -i, --interactive            Run on interactive mode
+  -m, --missing                Only prompt missing values in interactive mode
+  -h, --help                   display help for command
+```
+
+### List pushed configurations
+
+```
+Usage: oprah list [options]
+
+List all remote configurations and secrets.
+
+Options:
+  -h, --help  display help for command
+```
+
+### Fetch individual configuration
+
+```
+Usage: oprah fetch [options]
+
+Fetch config or secret
+
+Options:
+  -k, --keys [keys]  Comma seperated configs to fetch (example:
+                     "SOME_CONFIG,ANOTHER_CONFIG")
+  -h, --help         display help for command
+```
+
+Fetch configuration can be used in automation scripts. Example:
+
+```bash
+PARAMS=$(./node_modules/.bin/cm fetch -k "CALLBACK_URL,LOGOUT_URL" -s $STAGE)
+
+CALLBACK_URL=$(echo $PARAMS | jq -er ".CALLBACK_URL")
+LOGOUT_URL=$(echo $PARAMS | jq -er ".LOGOUT_URL")
+
+# do something with the values
+```
+
+### Import
+
+```
+Usage: oprah import [options]
+
+Import all of the configuration from the json from to a provider
+
+Options:
+  -p, --path [path]  The location of the secrets and configuration file
+                     (default: "/tmp/oprah-exports.json")
+  -h, --help         display help for command
+```
+
+### Export
+
+```
+Usage: oprah export [options]
+
+Export of all of the configuration from the provider to a text json file
+
+Options:
+  -p, --path [path]  The location for the output secrets & configuration file
+                     (default: "/tmp/oprah-exports.json")
+  -h, --help         display help for command
 ```
 
 ### License
 
 Feel free to use the code, it's released using the MIT license.
 
-[travis-image]: https://travis-ci.org/ACloudGuru/oprah.svg?branch=master
-[travis-url]: https://travis-ci.org/ACloudGuru/oprah
+[github-actions-image]: https://github.com/acloudguru/oprah/actions/workflows/publish.yml/badge.svg
+[github-actions-url]: https://github.com/ACloudGuru/oprah/actions/workflows/publish.yml
 [dependencies-image]:https://david-dm.org/ACloudGuru/oprah/status.svg
 [dependencies-url]:https://david-dm.org/ACloudGuru/oprah
 [npm-image]:https://img.shields.io/npm/v/oprah.svg
