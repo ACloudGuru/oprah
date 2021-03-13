@@ -24,4 +24,5 @@ jobs:
 
       - run: yarn lint
 
-      - uses: codecov/codecov-action@v1
+      - name: Generate code coverage
+        uses: codecov/codecov-action@v1
