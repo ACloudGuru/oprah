@@ -2,15 +2,16 @@ service: my-service
 provider:
   name: ssm
 
-# stacks:
-#   - my-service-student-team
+stacks:
+  - custom-domains-${stage}
+  - auth-service-stateful-${stage}
 
 config:
   path: /${stage}/config
   defaults:
     DB_NAME: my-database
     DB_DB: my-db
-    # DB_ARN: arn-path-${TableName} # interpolated from custom-resources stack
+    DB_ARN: arn-path-${UserPoolId} # interpolated from custom-resources stack
 
 secret:
   path: /${stage}/secret
