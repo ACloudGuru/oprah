@@ -8,7 +8,11 @@ module.exports = {
     '!**/node_modules/**'
   ],
   coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'text-summary', 'html'],
+  coverageReporters: [
+    ['lcovonly', { projectRoot: __dirname }],
+    'text-summary',
+    'html'
+  ],
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   watchman: true,
   coverageThreshold: {
