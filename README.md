@@ -89,6 +89,7 @@ Options:
   -V, --version          output the version number
   -s, --stage [stage]    Specify stage to run on. (required)
   -c, --config [config]  Path to oprah configuration (default: "oprah.yml")
+  -i, --interactive      specify values through command line
   -h, --help             display help for command
 
 Commands:
