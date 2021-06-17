@@ -8,7 +8,8 @@
     "node": ">=12.14.0"
   },
   "contributors": [
-    "Silla Tan <silla.tan@acloud.guru>"
+    "Silla Tan <silla.tan@acloud.guru>",
+    "DevOps Team <devops@acloud.guru>"
   ],
   "license": "MIT",
   "bin": {
@@ -24,7 +25,6 @@
   "keywords": [
     "amazon-web-services",
     "aws-parameter-store",
-    "aws-dynamodb",
     "configuration-management",
     "aws"
   ],
@@ -34,7 +34,6 @@
   "homepage": "https://github.com/ACloudGuru/oprah",
   "dependencies": {
     "aws-sdk": "^2.862.0",
-    "cfn": "^1.8.1",
     "chalk": "^4.1.0",
     "commander": "^7.1.0",
     "dataloader": "^2.0.0",
