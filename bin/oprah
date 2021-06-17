@@ -64,12 +64,17 @@ program
   )
   .option(
     '-p, --path [path]',
-    'The location for the output secrets & configuration file (default: "/tmp/oprah-exports.json")'
+    'The location for the output secrets & configuration file (default: "/tmp/oprah-exports.json" or ".env_oprah")'
   )
-  .action(({ path }) => {
+  .option(
+    '-t, --target [target]',
+    'The output target, available options are json|env (default:json)'
+  )
+  .action(({ path, target }) => {
     const { stage, config } = program.opts();
     oprahPromise = makeOprah({ stage, config }).export(
-      path || '/tmp/oprah-exports.json'
+      path || (target === 'env' ? '.env_oprah' : '/tmp/oprah-exports.json'),
+      target || 'json'
     );
   });
 
