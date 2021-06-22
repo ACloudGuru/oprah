@@ -174,8 +174,11 @@ Usage: oprah export [options]
 Export of all of the configuration from the provider to a text json file
 
 Options:
-  -p, --path [path]  The location for the output secrets & configuration file
-                     (default: "/tmp/oprah-exports.json")
+  -p, --path [path]      The location for the output secrets & configuration file
+                         (default: "/tmp/oprah-exports.json" or ".env_oprah")
+  -t, --target [target]  The output target, available options are json|env
+                         (default:json)
+
   -h, --help         display help for command
 ```
 
