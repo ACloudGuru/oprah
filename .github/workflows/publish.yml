@@ -1,11 +1,15 @@
 name: Publish
 
 on:
-  - release:
-      types: 
-        - created
+  release:
+    types: 
+      - created
 
-  - workflow_dispatch
+  workflow_dispatch:
+    inputs:
+    name:
+      description: 'Reason for manual trigger'
+      required: true
 
 jobs:
   build:
