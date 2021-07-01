@@ -55,7 +55,7 @@
     "eslint-plugin-jest": "^24.2.1",
     "eslint-plugin-prettier": "^3.3.1",
     "husky": "^6.0.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.6",
     "pinst": "^2.1.6",
     "prettier": "^1.18.2"
   }
