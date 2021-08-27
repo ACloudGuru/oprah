@@ -40,8 +40,7 @@
     "deep-map": "^2.0.0",
     "es6-weak-map": "^2.0.3",
     "js-yaml": "^4.0.0",
-    "lodash.get": "^4.4.2",
-    "lodash.template": "^4.5.0",
+    "lodash": "^4.17.21",
     "prompt": "^1.1.0",
     "root-path": "^0.2.1"
   },

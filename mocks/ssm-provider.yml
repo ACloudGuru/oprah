@@ -15,4 +15,3 @@ secret:
   path: /${stage}/oprah/secret
   required:
     DB_PASSWORD: "secret database password"
-
