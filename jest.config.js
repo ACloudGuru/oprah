@@ -10,6 +10,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: [
     ['lcovonly', { projectRoot: __dirname }],
+    'text',
     'text-summary',
     'html'
   ],

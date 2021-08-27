@@ -1,6 +1,6 @@
 {
   "name": "oprah",
-  "version": "5.1.0",
+  "version": "5.2.0",
   "description": "Package to deploy parameters to AWS",
   "repository": "https://github.com/ACloudGuru/oprah.git",
   "author": "subash adhikari <subash.adhikari@acloud.guru>",
@@ -9,7 +9,9 @@
   },
   "contributors": [
     "DevOps Team <devops@acloud.guru>",
-    "Jaepil Kim <jaepil.kim@acloud.guru>"
+    "Jaepil Kim <jaepil.kim@acloud.guru>",
+    "Kyle Ruan <kyle.ruan@acloud.guru>",
+    "Patrick Shiel <patrick.shiel@acloud.guru>"
   ],
   "license": "MIT",
   "bin": {

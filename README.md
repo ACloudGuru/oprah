@@ -116,6 +116,7 @@ Options:
   -v, --variables [variables]  Variables used for config interpolation.
   -i, --interactive            Run on interactive mode
   -m, --missing                Only prompt missing values in interactive mode
+  -cu, --clean-up              Clean up orphan configs or secrets
   -h, --help                   display help for command
 ```
 
@@ -180,7 +181,20 @@ Options:
   -t, --target [target]  The output target, available options are json|env
                          (default:json)
 
-  -h, --help         display help for command
+  -h, --help             display help for command
+```
+
+### Clean up
+
+```
+Usage: oprah clean-up [options]
+
+Clean up orphan configurations and secrets from provider
+
+Options:
+  -d, --dry-run [dryRun]  Execute a dry run to display all orphan configurations and secrets
+
+  -h, --help              display help for command
 ```
 
 ### License
@@ -195,4 +209,3 @@ Feel free to use the code, it's released using the MIT license.
 [npm-url]:https://www.npmjs.com/package/oprah
 [codacy-image]:https://api.codacy.com/project/badge/Grade/6464d14b26214357ba838d2cdbdfcb8e
 [codacy-url]:https://www.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ACloudGuru/oprah&amp;utm_campaign=Badge_Grade
-
