@@ -23,7 +23,8 @@ program
   )
   .option('-i, --interactive', 'Run on interactive mode')
   .option('-m, --missing', 'Only prompt missing values in interactive mode')
-  .action(({ interactive, variables, missing }) => {
+  .option('-cu, --cleaning-up [cleanUp]', 'Clean up orphan configs or secrets')
+  .action(({ interactive, variables, missing, cleanUp = false }) => {
     let parsedVariables = {};
 
     try {
@@ -45,7 +46,7 @@ program
       variables: parsedVariables
     };
 
-    oprahPromise = makeOprah(params).run();
+    oprahPromise = makeOprah(params).run({ deleting: cleanUp });
   });
 
 program
@@ -113,6 +114,17 @@ program
     const { stage, config } = program.opts();
     oprahPromise = makeOprah({ stage, config }).fetch({
       keys: keys.split(',')
+    });
+  });
+
+program
+  .command('clean-up')
+  .description('Cleaning up orphan configs or secrets')
+  .option('-d, --dry-run [dryRun]', 'Execute a dry run')
+  .action(({ dryRun }) => {
+    const { stage, config } = program.opts();
+    oprahPromise = makeOprah({ stage, config }).cleanUp({
+      dryRun
     });
   });
 
