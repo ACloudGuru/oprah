@@ -116,7 +116,7 @@ Options:
   -v, --variables [variables]  Variables used for config interpolation.
   -i, --interactive            Run on interactive mode
   -m, --missing                Only prompt missing values in interactive mode
-  -cu, --clean-up              Clean up orphan configs or secrets
+  -d, --deleting               Deleting orphan configs or secrets
   -h, --help                   display help for command
 ```
 
