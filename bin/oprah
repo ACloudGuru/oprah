@@ -23,8 +23,8 @@ program
   )
   .option('-i, --interactive', 'Run on interactive mode')
   .option('-m, --missing', 'Only prompt missing values in interactive mode')
-  .option('-d, --deleting [deleting]', 'Deleting orphan configs or secrets')
-  .action(({ interactive, variables, missing, deleting = false }) => {
+  .option('-r, --removing [removing]', 'Removing orphan configs or secrets')
+  .action(({ interactive, variables, missing, removing = false }) => {
     let parsedVariables = {};
 
     try {
@@ -46,7 +46,7 @@ program
       variables: parsedVariables
     };
 
-    oprahPromise = makeOprah(params).run({ deleting });
+    oprahPromise = makeOprah(params).run({ removing });
   });
 
 program
