@@ -4,7 +4,6 @@
 [![NPM Status][npm-image]][npm-url]
 [![dependencies Status][dependencies-image]][dependencies-url]
 
-
 # 🐝 Oprah
 
 Node module to push configuration and encrypted secrets to AWS.
@@ -50,7 +49,6 @@ $ oprah run --stage <stage> --interactive
 ### Config File
 
 Following is the configuration file will all possible options:
-
 
 ```
 service: oprah-service
@@ -181,6 +179,8 @@ Options:
   -t, --target [target]  The output target, available options are json|env
                          (default:json)
 
+  -C, --config-only [configOnly] Only export `config` section
+
   -h, --help             display help for command
 ```
 
@@ -203,9 +203,9 @@ Feel free to use the code, it's released using the MIT license.
 
 [github-actions-image]: https://github.com/acloudguru/oprah/actions/workflows/publish.yml/badge.svg
 [github-actions-url]: https://github.com/ACloudGuru/oprah/actions/workflows/publish.yml
-[dependencies-image]:https://david-dm.org/ACloudGuru/oprah/status.svg
-[dependencies-url]:https://david-dm.org/ACloudGuru/oprah
-[npm-image]:https://img.shields.io/npm/v/oprah.svg
-[npm-url]:https://www.npmjs.com/package/oprah
-[codacy-image]:https://api.codacy.com/project/badge/Grade/6464d14b26214357ba838d2cdbdfcb8e
-[codacy-url]:https://www.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ACloudGuru/oprah&amp;utm_campaign=Badge_Grade
+[dependencies-image]: https://david-dm.org/ACloudGuru/oprah/status.svg
+[dependencies-url]: https://david-dm.org/ACloudGuru/oprah
+[npm-image]: https://img.shields.io/npm/v/oprah.svg
+[npm-url]: https://www.npmjs.com/package/oprah
+[codacy-image]: https://api.codacy.com/project/badge/Grade/6464d14b26214357ba838d2cdbdfcb8e
+[codacy-url]: https://www.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&utm_medium=referral&utm_content=ACloudGuru/oprah&utm_campaign=Badge_Grade
