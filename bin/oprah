@@ -71,11 +71,13 @@ program
     '-t, --target [target]',
     'The output target, available options are json|env (default:json)'
   )
-  .action(({ path, target }) => {
+  .option('-C, --config-only [configOnly]', 'Only export configs')
+  .action(({ path, target, configOnly = false }) => {
     const { stage, config } = program.opts();
     oprahPromise = makeOprah({ stage, config }).export(
       path || (target === 'env' ? '.env_oprah' : '/tmp/oprah-exports.json'),
-      target || 'json'
+      target || 'json',
+      configOnly
     );
   });
 
