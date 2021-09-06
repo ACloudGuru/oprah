@@ -84,6 +84,4 @@ typings/
 .DS_Store
 .env-dev
 .env-deploy
-.env
-
-
+.env*
