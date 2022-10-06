@@ -59,6 +59,15 @@ program
   });
 
 program
+  .command('generate')
+  .description('Generate an example configuration file.')
+  .action(() => {
+    const { stage, config } = program.opts();
+
+    oprahPromise = makeOprah({ stage, config }).generate();
+  });
+
+program
   .command('export')
   .description(
     'Export of all of the configuration from the provider to a text json file'
@@ -146,7 +155,7 @@ if (!process.argv.slice(2).length) {
   displayHelpAndExit();
 }
 
-if (!program.opts().stage) {
+if (program.args[0] !== 'generate' && !program.opts().stage) {
   logError('Invalid options!! You must specify stage.');
   displayHelpAndExit();
 }
