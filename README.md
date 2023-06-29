@@ -24,7 +24,8 @@ $ npm install oprah
 
 ```
 service: oprah-service
-provider: ssm
+provider:
+  name: ssm
 
 config:
   path: /${stage}/oprah/config
@@ -52,7 +53,8 @@ Following is the configuration file will all possible options:
 
 ```
 service: oprah-service
-provider: ssm                                 # Only supports ssm for now.
+provider:
+  name: ssm                                   # Only supports ssm for now.
 
 stacks:                                       # Outputs from cloudformation stacks that needs to be interpolated.
   - some-cloudformation-stack
