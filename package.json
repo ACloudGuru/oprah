@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/ACloudGuru/oprah",
   "dependencies": {
-    "aws-sdk": "^2.1407.0",
+    "aws-sdk": "^2.1475.0",
     "chalk": "^4.1.0",
     "commander": "^7.1.0",
     "dataloader": "^2.0.0",
