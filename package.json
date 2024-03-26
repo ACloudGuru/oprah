@@ -1,16 +1,17 @@
 {
   "name": "oprah",
-  "version": "5.6.0",
+  "version": "6.0.0",
   "description": "Package to deploy parameters to AWS",
   "repository": "https://github.com/ACloudGuru/oprah.git",
   "author": "subash adhikari <subash.adhikari@acloud.guru>",
   "engines": {
-    "node": ">=12.14.0"
+    "node": ">=18.18.0"
   },
   "contributors": [
     "DevOps Team <cloud-skills-devops@pluralsight.com>",
     "Jaepil Kim <jaepil-kim@pluralsight.com>",
-    "Patrick Shiel <patrick-shiel@pluralsight.com>"
+    "Patrick Shiel <patrick-shiel@pluralsight.com>",
+    "Tim Kinnane <tim-kinnane@pluralsight.com>"
   ],
   "license": "MIT",
   "bin": {
@@ -19,6 +20,8 @@
   "scripts": {
     "lint": "yarn eslint .",
     "test": "yarn jest --coverage",
+    "example:run": "bin/oprah -c examples/ssm-simple-example.yml run -i",
+    "example:list": "bin/oprah -c examples/ssm-simple-example.yml list",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable"
@@ -39,7 +42,6 @@
     "commander": "^7.1.0",
     "dataloader": "^2.0.0",
     "deep-map": "^2.0.0",
-    "es6-weak-map": "^2.0.3",
     "js-yaml": "^4.0.0",
     "lodash": "^4.17.21",
     "prompt": "^1.1.0",

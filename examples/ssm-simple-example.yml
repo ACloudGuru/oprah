@@ -1,0 +1,9 @@
+service: example-service
+provider:
+  name: ssm
+config:
+  path: /${stage}/config
+  defaults:
+    OPTIONAL_CONFIG_EXAMPLE: optional-config-example-default-value
+  required:
+    REQUIRED_CONFIG_EXAMPLE: "provide a value in interactive mode"
