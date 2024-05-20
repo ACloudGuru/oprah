@@ -3,16 +3,17 @@
 const chalk = require('chalk');
 const program = require('commander');
 
-const pjson = require('../package.json');
+const { version } = require('../package.json');
 const { makeOprah } = require('../lib/make-oprah');
 const { logError, log } = require('../lib/utils/logger');
 
 let oprahPromise = null;
 
 program
-  .version(pjson.version)
+  .version(version)
   .option('-s, --stage [stage]', 'Specify stage to run on. (required)')
-  .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml');
+  .option('-c, --config [config]', 'Path to oprah configuration', 'oprah.yml')
+  .option('--region [region]', 'AWS region to use (default: us-east-1)');
 
 program
   .command('run')
@@ -23,31 +24,43 @@ program
   )
   .option('-i, --interactive', 'Run on interactive mode')
   .option('-m, --missing', 'Only prompt missing values in interactive mode')
-  .option('-r, --removing [removing]', 'Removing orphan configs or secrets')
-  .action(({ interactive, variables, missing, removing = false }) => {
-    let parsedVariables = {};
-
-    try {
-      if (variables) {
-        parsedVariables = JSON.parse(variables);
-      }
-    } catch (error) {
-      logError(`Variables must be in JSON format!! ${error.message}.`);
-      program.help();
-    }
-
-    const { stage, config } = program.opts();
-
-    const params = {
-      stage,
+  .option(
+    '-r, --removing [removing]',
+    'Removing orphan configs or secrets (default: false)'
+  )
+  .action(
+    ({
       interactive,
-      missingOnly: missing,
-      config,
-      variables: parsedVariables
-    };
+      variables,
+      missing,
+      removing = false,
+      region = 'us-east-1'
+    }) => {
+      let parsedVariables = {};
 
-    oprahPromise = makeOprah(params).run({ removing });
-  });
+      try {
+        if (variables) {
+          parsedVariables = JSON.parse(variables);
+        }
+      } catch (error) {
+        logError(`Variables must be in JSON format!! ${error.message}.`);
+        program.help();
+      }
+
+      const { stage, config } = program.opts();
+
+      const params = {
+        stage,
+        interactive,
+        missingOnly: missing,
+        config,
+        variables: parsedVariables,
+        region
+      };
+
+      oprahPromise = makeOprah(params).run({ removing });
+    }
+  );
 
 program
   .command('init')
@@ -82,8 +95,8 @@ program
   )
   .option('-C, --config-only [configOnly]', 'Only export configs')
   .action(({ path, target, configOnly = false }) => {
-    const { stage, config } = program.opts();
-    oprahPromise = makeOprah({ stage, config }).export(
+    const { stage, config, region } = program.opts();
+    oprahPromise = makeOprah({ stage, config, region }).export(
       path || (target === 'env' ? '.env_oprah' : '/tmp/oprah-exports.json'),
       target || 'json',
       configOnly
@@ -100,8 +113,8 @@ program
     'The location of the secrets and configuration file (default: "/tmp/oprah-exports.json")'
   )
   .action(({ path }) => {
-    const { stage, config } = program.opts();
-    oprahPromise = makeOprah({ stage, config }).import(
+    const { stage, config, region } = program.opts();
+    oprahPromise = makeOprah({ stage, config, region }).import(
       path || '/tmp/oprah-exports.json'
     );
   });
@@ -110,8 +123,8 @@ program
   .command('list')
   .description('List all remote configurations and secrets.')
   .action(() => {
-    const { stage, config } = program.opts();
-    oprahPromise = makeOprah({ stage, config }).list();
+    const { stage, config, region } = program.opts();
+    oprahPromise = makeOprah({ stage, config, region }).list();
   });
 
 program
@@ -119,11 +132,11 @@ program
   .description('Fetch config or secret')
   .option(
     '-k, --keys [keys]',
-    'Comma seperated configs to fetch (example: "SOME_CONFIG,ANOTHER_CONFIG")'
+    'Comma separated configs to fetch (example: "SOME_CONFIG,ANOTHER_CONFIG")'
   )
   .action(({ keys }) => {
-    const { stage, config } = program.opts();
-    oprahPromise = makeOprah({ stage, config }).fetch({
+    const { stage, config, region } = program.opts();
+    oprahPromise = makeOprah({ stage, config, region }).fetch({
       keys: keys.split(',')
     });
   });
@@ -133,15 +146,14 @@ program
   .description('Cleaning up orphan configs or secrets')
   .option('-d, --dry-run [dryRun]', 'Execute a dry run')
   .action(({ dryRun }) => {
-    const { stage, config } = program.opts();
-    oprahPromise = makeOprah({ stage, config }).cleanUp({
+    const { stage, config, region } = program.opts();
+    oprahPromise = makeOprah({ stage, config, region }).cleanUp({
       dryRun
     });
   });
 
 function displayHelpAndExit() {
   program.help();
-  process.exit(1);
 }
 
 program.on('command:*', () => {

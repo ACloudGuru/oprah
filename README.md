@@ -88,6 +88,7 @@ Options:
   -s, --stage [stage]    Specify stage to run on. (required)
   -c, --config [config]  Path to oprah configuration (default: "oprah.yml")
   -i, --interactive      specify values through command line
+  -r, --removing [removing]  Removing orphan configs or secrets (default: false)
   -h, --help             display help for command
 
 Commands:
@@ -197,6 +198,17 @@ Options:
   -h, --help              display help for command
 ```
 
+### Examples
+
+Sample of current usage:
+
+#### Fetching individual values
+
+[BFF](https://github.com/ACloudGuru/school/blob/212fcc9fc983d6efb49b2a7c28ff0854ebb631c1/backend/services/bff/bin/push-schema#L54)
+```
+export APOLLO_KEY=$(yarn --silent oprah fetch -k ENGINE_API_KEY -s "$ACG_ENV" | jq -er ".ENGINE_API_KEY")
+```
+
 ### License
 
 Feel free to use the code, it's released using the MIT license.
@@ -209,3 +221,9 @@ Feel free to use the code, it's released using the MIT license.
 [npm-url]: https://www.npmjs.com/package/oprah
 [codacy-image]: https://api.codacy.com/project/badge/Grade/6464d14b26214357ba838d2cdbdfcb8e
 [codacy-url]: https://www.codacy.com/app/subash.adhikari/oprah?utm_source=github.com&utm_medium=referral&utm_content=ACloudGuru/oprah&utm_campaign=Badge_Grade
+
+## TODO:
+
+- [ ] Remove init method - does nothing but validate providers, can be done in CLI definition
+- [ ] Refactor for latest AWS SDK
+- [ ] Set AWS SDK as peer dependency
