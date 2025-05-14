@@ -1,0 +1,8 @@
+{
+   "version":5,
+   "team":"exp_vulcan",
+   "jira-project-key":"vlc",
+   "slack-channel":"#dev-vulcan",
+   "in-use":true,
+   "bc":"cloud-labs"
+}
